@@ -1,0 +1,33 @@
+[project]
+name = "gh-inbox"
+version = "0.1.0"
+description = "Config-driven CLI that writes a GitHub inbox into today's Obsidian daily note via the gh CLI."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+dependencies = ["click>=8.1"]
+
+[project.scripts]
+gh-inbox = "gh_inbox.cli:main"
+
+[tool.poetry]
+packages = [{ include = "gh_inbox", from = "src" }]
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=8"
+ruff = ">=0.6"
+
+[build-system]
+requires = ["poetry-core>=2.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["tests"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]

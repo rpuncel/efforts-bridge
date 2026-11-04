@@ -1,0 +1,29 @@
+# gh-inbox config. Copy to ~/.config/gh-inbox/config.toml (or pass --config)
+# and replace the placeholder values. Never commit real hostnames, orgs or repos.
+
+[github]
+# Bare hostname: "github.com" or your GitHub Enterprise Server host.
+# gh must be logged in to it: `gh auth login --hostname <host>`.
+host = "github.example.com"
+
+[vault]
+# Path to the Obsidian vault (~ is expanded).
+path = "~/Documents/MyVault"
+
+[daily_notes]
+# Folder inside the vault, and the Periodic Notes filename format (moment.js tokens;
+# ".md" is added). Supported tokens: YYYY YY MMMM MMM MM M DD D dddd ddd, [literal].
+folder = "Calendar/Daily Notes"
+format = "YYYY-MM-DD"
+
+[inbox]
+# "Waiting on you": newest items from the last `waiting_days` days, at most `waiting_max`.
+waiting_max = 10
+waiting_days = 7
+# "Oldest": the stalest remaining items, at most `oldest_max`.
+oldest_max = 5
+# Notification reasons that count as waiting on you. Review requests always carry
+# "review_requested"; assigned issues carry "assigned" (add it here to include them).
+waiting_reasons = ["review_requested", "mention", "team_mention", "author", "comment"]
+# Which sources to fetch.
+sources = ["review_requests", "notifications", "assigned"]
