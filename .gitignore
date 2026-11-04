@@ -1,0 +1,19 @@
+# Local config with real hostnames/orgs/repos — never commit
+config.local.toml
+*.local.toml
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+dist/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Quarto
+docs/_site/
+docs/.quarto/
+/.quarto/
+
+.DS_Store
