@@ -1,0 +1,9 @@
+| When | What | Set up in |
+|---|---|---|
+| Weekdays {{< meta facts.time.job >}} | launchd runs `gh-inbox`; it runs on wake if the Mac was asleep | [launchd and alerts](launchd.qmd) |
+| Weekdays {{< meta facts.time.day_start >}} | Start of day | — |
+| Weekdays {{< meta facts.time.triage >}} | {{< meta facts.nudge.reminder_title >}} reminder alerts; {{< meta facts.nudge.triage_block >}} calendar block (15 min) | [Reminders and Calendar](reminders-calendar.qmd) |
+| Weekdays {{< meta facts.time.followup >}} | Follow-up alert if the reminder is still unticked | [Reminders and Calendar](reminders-calendar.qmd) |
+| {{< meta facts.time.digest_day >}} {{< meta facts.time.digest >}} | {{< meta facts.nudge.digest_block >}} calendar block, optional, shown as free | [Reminders and Calendar](reminders-calendar.qmd) |
+
+: Schedule. The launchd job runs before the start of day so the inbox is fresh before the triage reminder fires. If you move one time, move the others with it.

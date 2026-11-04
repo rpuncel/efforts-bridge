@@ -1,0 +1,23 @@
+| Key | Default | Must match |
+|---|---|---|
+| {{< meta facts.key.host >}} | {{< meta facts.ph.home_host >}} | A host you've run `gh auth login --hostname` for ([GitHub settings](github-settings.qmd)) |
+| {{< meta facts.key.personal_repo >}} | — | The repo whose issues the [GitHub Project](github-project.qmd) tracks |
+| {{< meta facts.key.project_owner >}}, {{< meta facts.key.project_number >}} | — | The [GitHub Project](github-project.qmd) URL: `https://<host>/users/<owner>/projects/<number>` |
+| {{< meta facts.key.project_field >}} | {{< meta facts.project.field >}} | The Project's single-select field name, character for character |
+| {{< meta facts.key.vault_path >}} | — | The vault folder Obsidian opens ([Obsidian](obsidian.qmd)) |
+| {{< meta facts.key.daily_folder >}} | {{< meta facts.vault.daily_folder >}} | Periodic Notes → Daily Notes → *Note folder* |
+| {{< meta facts.key.daily_format >}} | {{< meta facts.vault.daily_format >}} | Periodic Notes → Daily Notes → *Format* |
+| {{< meta facts.key.weekly_folder >}} | {{< meta facts.vault.weekly_folder >}} | Periodic Notes → Weekly Notes → *Note folder* |
+| {{< meta facts.key.weekly_format >}} | {{< meta facts.vault.weekly_format >}} | Periodic Notes → Weekly Notes → *Format* |
+| {{< meta facts.key.efforts >}} | see the effort states table | The six effort folders in the vault, relative to {{< meta facts.key.vault_path >}} |
+| {{< meta facts.key.issue_key >}} | {{< meta facts.fm.issue_key >}} | The frontmatter key effort notes carry |
+| {{< meta facts.key.area_color >}} | {{< meta facts.label.area_color >}} | Colour for {{< meta facts.fm.area_prefix >}} labels created by `sync` |
+| {{< meta facts.key.waiting_max >}} | {{< meta facts.inbox.waiting_max >}} | Cap on {{< meta facts.inbox.waiting >}} |
+| {{< meta facts.key.waiting_days >}} | {{< meta facts.inbox.waiting_days >}} | How far back {{< meta facts.inbox.waiting >}} looks, in days |
+| {{< meta facts.key.oldest_max >}} | {{< meta facts.inbox.oldest_max >}} | Length of {{< meta facts.inbox.oldest >}} |
+| {{< meta facts.key.core >}} | `[]` | Repos you watch on GitHub ([GitHub settings](github-settings.qmd)) |
+| {{< meta facts.key.curious >}} | `[]` | Repos you don't watch; written by `gh-inbox cleanup init` |
+| {{< meta facts.key.orgs >}} | `[]` | Orgs whose unsorted repos the digest picks up |
+| {{< meta facts.key.rules >}} | the three rules shown above | What Claude flags in the digest |
+
+: Config keys.

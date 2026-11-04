@@ -1,0 +1,47 @@
+---
+title: "gh-inbox config file"
+subtitle: "The one file every command reads, and the hub every other tool lines up with."
+---
+
+Every `gh-inbox` command reads one TOML file. By default that's {{< meta facts.path.config >}}; pass `--config PATH` to use another, such as a {{< meta facts.path.config_local >}} next to a checkout of this repo (the repo's `.gitignore` excludes it). The file holds your real hostname, org and repo names, so it never goes in the repo or on this site.
+
+## What to check
+
+- [ ] The file exists at {{< meta facts.path.config >}} (or you always pass `--config`, including in the [launchd wrapper](launchd.qmd)).
+- [ ] It holds real values, and the repo holds none: `git grep` for your real hostname in a checkout finds nothing.
+- [ ] Each key below matches the setting it names in the other tools.
+- [ ] After `gh-inbox cleanup init`, you've hand-sorted the generated list into {{< meta facts.key.core >}} and {{< meta facts.key.curious >}} (a ten-minute edit). Re-running `cleanup init` keeps your sorting and only adds repos it hasn't seen.
+
+## Example
+
+With the placeholders this site uses:
+
+{{< include _partials/config-example.qmd >}}
+
+## Keys
+
+{{< include _partials/config-keys.qmd >}}
+
+### Effort folders
+
+{{< meta facts.key.efforts_table >}} has one key per effort state. Each is a folder path relative to the vault:
+
+{{< include _partials/effort-states.qmd >}}
+
+### Repo tiers
+
+{{< include _partials/repo-tiers.qmd >}}
+
+### Digest rules
+
+{{< meta facts.key.rules >}} is a list of plain-language rules Claude applies when flagging digest items, one line and a link each. Releases with empty notes are always skipped. The starting point is the three rules in the example above; edit them as you learn what's worth your Thursday.
+
+## How it lines up with the other tools
+
+| Keys | Line up with |
+|---|---|
+| {{< meta facts.key.host >}} | `gh auth` on that host ([GitHub settings](github-settings.qmd)) |
+| {{< meta facts.key.personal_repo >}}, {{< meta facts.key.project_owner >}}, {{< meta facts.key.project_number >}}, {{< meta facts.key.project_field >}} | The repo and Project ([GitHub Project](github-project.qmd)) |
+| {{< meta facts.key.vault_path >}}, {{< meta facts.key.daily_folder >}}, {{< meta facts.key.daily_format >}}, {{< meta facts.key.weekly_folder >}}, {{< meta facts.key.weekly_format >}}, {{< meta facts.key.efforts_table >}}, {{< meta facts.key.issue_key >}} | The vault and Periodic Notes ([Obsidian](obsidian.qmd)) |
+| {{< meta facts.key.core >}}, {{< meta facts.key.curious >}} | Your watch list ([GitHub settings](github-settings.qmd)) |
+| The file's path | The command the [launchd job](launchd.qmd) runs |

@@ -1,0 +1,11 @@
+| Command | Does | Writes to |
+|---|---|---|
+| `gh-inbox` | Builds today's inbox from review requests, unread notifications and issues assigned to you | Daily note, between the inbox markers |
+| `gh-inbox cleanup init` | Lists every repo you watch and adds new ones under {{< meta facts.key.curious >}}; keeps {{< meta facts.key.core >}} and your edits | Config file |
+| `gh-inbox cleanup` | Dry run: which curious repos would be unwatched, with unread counts | Nothing |
+| `gh-inbox cleanup --apply` | Unwatches curious repos and marks their notifications read | GitHub |
+| `gh-inbox digest` | Last {{< meta facts.digest.days >}} days of releases, issues and PRs in curious and unsorted repos, flagged by Claude | This week's weekly note, between the digest markers |
+| `gh-inbox sync --dry-run` | Prints the planned issue, label, Project, sub-issue and comment changes | Nothing |
+| `gh-inbox sync` | Syncs effort notes one way, Obsidian → GitHub | {{< meta facts.ph.personal_repo >}}, the Project, the notes' {{< meta facts.fm.issue_key >}} frontmatter, posted log bullets |
+
+: `gh-inbox` commands. Every command takes `--config PATH`; without it, `gh-inbox` reads {{< meta facts.path.config >}}. All of them talk to GitHub through `gh --hostname` using {{< meta facts.key.host >}}.

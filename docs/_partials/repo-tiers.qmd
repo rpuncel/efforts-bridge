@@ -1,0 +1,7 @@
+| Tier | Config key | You watch it on GitHub? | In the daily inbox | In the weekly digest |
+|---|---|---|---|---|
+| {{< meta facts.tier.core >}} | {{< meta facts.key.core >}} | Yes, all activity | Yes | No |
+| {{< meta facts.tier.curious >}} | {{< meta facts.key.curious >}} | No (unwatched by `gh-inbox cleanup --apply`) | Only when you're mentioned, assigned, review-requested or participating | Yes |
+| unsorted | not in the config yet; any repo in {{< meta facts.key.orgs >}} | No | Same as curious | Yes, listed first under {{< meta facts.digest.new_repos >}} |
+
+: Repo tiers. Repos you create, and repos where you're in CODEOWNERS, belong in {{< meta facts.tier.core >}}.

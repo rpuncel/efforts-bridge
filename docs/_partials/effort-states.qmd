@@ -1,0 +1,10 @@
+| State | Vault folder | Config key | Label | {{< meta facts.project.field >}} option | Issue |
+|---|---|---|---|---|---|
+| on | {{< meta facts.vault.efforts.on >}} | `efforts.on` | `state/on` | `On` | open |
+| ongoing | {{< meta facts.vault.efforts.ongoing >}} | `efforts.ongoing` | `state/ongoing` | `Ongoing` | open |
+| simmering | {{< meta facts.vault.efforts.simmering >}} | `efforts.simmering` | `state/simmering` | `Simmering` | open |
+| sleeping | {{< meta facts.vault.efforts.sleeping >}} | `efforts.sleeping` | `state/sleeping` | `Sleeping` | open |
+| done | {{< meta facts.vault.efforts.done >}} | `efforts.done` | `state/done` | `Done` | closed as **completed** |
+| canceled | {{< meta facts.vault.efforts.canceled >}} | `efforts.canceled` | `state/canceled` | `Canceled` | closed as **not planned** |
+
+: Effort states. The folder a note sits in is the only thing you change; `gh-inbox sync` derives the label, the Project field and the open/closed state from it. {tbl-colwidths="[12,20,18,18,16,16]"}

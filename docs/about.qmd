@@ -1,0 +1,28 @@
+---
+title: "About these docs"
+subtitle: "How the site is built, and how to report a mismatch."
+---
+
+These pages describe how `gh-inbox` and the tools around it are meant to behave. [SPEC.md](https://github.com/rpuncel/efforts-bridge/blob/main/SPEC.md) is the source of truth; this site is the walk-through version of it.
+
+## Reporting a mismatch
+
+1. Read the [overview](index.qmd), then walk each tool page as if setting it up.
+2. For each mismatch or change, open one issue on `rpuncel/efforts-bridge` labelled {{< meta facts.label.spec >}}.
+3. Each issue is fixed in one pull request that changes both SPEC.md and these docs, so they never drift.
+4. Once the implementation lands, anything the code does that the docs don't say (or the reverse) becomes a {{< meta facts.label.spec >}} issue too.
+
+## How the site is built
+
+- It's a [Quarto](https://quarto.org) website in `docs/`, built and deployed to GitHub Pages by `.github/workflows/docs.yml` on every push to `main`. Pull requests build it but don't deploy.
+- Every shared fact lives once in `docs/_partials/`:
+  - single values (folder names, marker comments, config key names, times, placeholders) in `_partials/facts.yml`, used inline as `{{{< meta facts.… >}}}`;
+  - tables, templates and the example config in `_partials/*.qmd`, pulled in with `{{{< include >}}}`.
+- Change a fact there and every page picks it up. Pages never restate a fact by hand.
+- Build locally with `quarto render docs`, or preview with `quarto preview docs`.
+
+## Privacy
+
+The repo and this site are public. They use placeholders such as {{< meta facts.ph.host >}}, {{< meta facts.ph.org >}} and {{< meta facts.ph.team_repo >}}; real values live only in your local config.
+
+{{< include _partials/placeholders.qmd >}}

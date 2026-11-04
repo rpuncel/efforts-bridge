@@ -1,0 +1,107 @@
+---
+title: "macOS launchd and alerts"
+subtitle: "The weekday job, the wrapper script, failure alerts and the heartbeat."
+---
+
+A user LaunchAgent runs `gh-inbox` every weekday morning through a small wrapper script. If the Mac is asleep at that time, launchd runs the job when it wakes. On failure the wrapper raises a persistent alert, one that stays on screen until you dismiss it, not a banner that slides away. A shell alias runs the same thing by hand.
+
+## What to check
+
+### The installed command
+
+- [ ] `gh-inbox` is installed with `uv tool install` (or `pipx install`) and lives at {{< meta facts.path.bin >}}. launchd calls it by that full path, never by bare name.
+- [ ] `which gh` gives a directory that's in the job's `PATH` below (`/opt/homebrew/bin` on Apple silicon).
+
+### The wrapper script
+
+{{< meta facts.path.wrapper >}}, executable (`chmod +x`):
+
+```bash
+#!/bin/bash
+# Run gh-inbox; on failure, raise a persistent alert naming the log.
+LOG={{< meta facts.path.log >}}
+mkdir -p "$(dirname "$LOG")"
+{
+  echo "--- $(date '+%Y-%m-%d %H:%M:%S')"
+  {{< meta facts.path.bin >}}
+} >>"$LOG" 2>&1
+status=$?
+if [ "$status" -ne 0 ]; then
+  /usr/bin/osascript -e "display alert \"gh-inbox failed (exit $status)\" message \"See $LOG\" as critical"
+fi
+exit "$status"
+```
+
+- [ ] `display alert` (not `display notification`) is what makes the alert persistent.
+
+### The LaunchAgent
+
+{{< meta facts.path.plist >}}:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>{{< meta facts.launchd.label >}}</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>-c</string>
+    <string>{{< meta facts.path.wrapper >}}</string>
+  </array>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+  </dict>
+  <!-- Weekdays 1 (Monday) to 5 (Friday) at {{< meta facts.time.job >}} -->
+  <key>StartCalendarInterval</key>
+  <array>
+    <dict><key>Weekday</key><integer>1</integer><key>Hour</key><integer>{{< meta facts.time.job_hour >}}</integer><key>Minute</key><integer>{{< meta facts.time.job_minute >}}</integer></dict>
+    <dict><key>Weekday</key><integer>2</integer><key>Hour</key><integer>{{< meta facts.time.job_hour >}}</integer><key>Minute</key><integer>{{< meta facts.time.job_minute >}}</integer></dict>
+    <dict><key>Weekday</key><integer>3</integer><key>Hour</key><integer>{{< meta facts.time.job_hour >}}</integer><key>Minute</key><integer>{{< meta facts.time.job_minute >}}</integer></dict>
+    <dict><key>Weekday</key><integer>4</integer><key>Hour</key><integer>{{< meta facts.time.job_hour >}}</integer><key>Minute</key><integer>{{< meta facts.time.job_minute >}}</integer></dict>
+    <dict><key>Weekday</key><integer>5</integer><key>Hour</key><integer>{{< meta facts.time.job_hour >}}</integer><key>Minute</key><integer>{{< meta facts.time.job_minute >}}</integer></dict>
+  </array>
+</dict>
+</plist>
+```
+
+- [ ] `launchctl print gui/$(id -u)/{{< meta facts.launchd.label >}}` shows the job loaded. After editing the plist, reload it:
+
+  ```bash
+  launchctl bootout gui/$(id -u) {{< meta facts.path.plist >}}
+  launchctl bootstrap gui/$(id -u) {{< meta facts.path.plist >}}
+  ```
+
+- [ ] `launchctl kickstart gui/$(id -u)/{{< meta facts.launchd.label >}}` runs it now; the daily note's stamp updates.
+- [ ] The job goes through `/bin/zsh -c` so the `~` in the wrapper path expands; launchd itself doesn't expand `~`. The wrapper does its own logging, so the plist needs no `StandardOutPath`.
+- [ ] The time is {{< meta facts.time.job >}}, before the triage reminder at {{< meta facts.time.triage >}}. Calendar-interval jobs missed while the Mac sleeps run on wake; jobs missed while it's shut down don't.
+
+### The alias
+
+In `~/.zshrc`:
+
+```bash
+alias {{< meta facts.launchd.alias >}}='{{< meta facts.path.wrapper >}}'
+```
+
+- [ ] {{< meta facts.launchd.alias >}} refreshes the inbox through the same wrapper, so a manual failure alerts and logs the same way.
+
+### Failure visibility
+
+- [ ] The log at {{< meta facts.path.log >}} has one `---` stamped section per run.
+- [ ] The heartbeat is the `updated at` stamp in today's inbox block. If it's missing or not from today, the job didn't run, even if no alert appeared (for example, the Mac was off).
+
+## How it lines up with the other tools
+
+{{< include _partials/schedule.qmd >}}
+
+| Here | Must line up with |
+|---|---|
+| The command `gh-inbox` | Reads {{< meta facts.path.config >}} ([config file](config.qmd)) |
+| `PATH` in the plist | Where `gh` is installed and authenticated ([GitHub settings](github-settings.qmd)) |
+| Job time {{< meta facts.time.job >}} | Before the reminder and calendar block ([Reminders and Calendar](reminders-calendar.qmd)) |
+| The job succeeding | Today's daily note existing at {{< meta facts.vault.daily_folder >}} ([Obsidian](obsidian.qmd)) |

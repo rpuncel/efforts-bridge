@@ -1,0 +1,24 @@
+What `gh-inbox` writes into today's note:
+
+```markdown
+{{< meta facts.marker.inbox_start >}}
+_updated at {{< meta facts.time.job >}}_
+
+**Waiting on you**
+
+- [ ] [Add retry to uploader](https://github.example.com/<your-org>/<team-repo>/pull/318) · <your-org>/<team-repo> · review requested
+- [ ] [Flaky deploy step](https://github.example.com/<your-org>/<team-repo>/issues/97) · <your-org>/<team-repo> · mentioned
+
+**Oldest**
+
+- [ ] [Document the release flow](https://github.example.com/<your-user>/<personal-repo>/issues/12) · <your-user>/<personal-repo> · assigned, 41 days
+
+_14 more items hidden_
+{{< meta facts.marker.inbox_end >}}
+```
+
+- **{{< meta facts.inbox.waiting >}}**: review requests, mentions and direct replies from the last {{< meta facts.inbox.waiting_days >}} days, at most {{< meta facts.inbox.waiting_max >}}.
+- **{{< meta facts.inbox.oldest >}}**: the {{< meta facts.inbox.oldest_max >}} stalest items, to close or bump. Optional.
+- One line counts the items neither list shows.
+- The `updated at` stamp is the heartbeat: missing or not today's means the job didn't run.
+- If today's note doesn't exist, `gh-inbox` exits with an error and doesn't create it.
