@@ -1,0 +1,63 @@
+---
+title: "Obsidian"
+subtitle: "Vault folders, Periodic Notes, Tasks, frontmatter, and the daily note template."
+---
+
+The vault at {{< meta facts.key.vault_path >}} is where you capture. `gh-inbox` writes into two kinds of notes (daily and weekly) and reads a third (effort notes). It never creates notes; it only fills marked blocks and, after creating an issue, writes the issue URL into an effort note's frontmatter.
+
+## What to check
+
+### Vault folders
+
+- [ ] The daily notes folder is {{< meta facts.vault.daily_folder >}} and the weekly notes folder is {{< meta facts.vault.weekly_folder >}}, or whatever {{< meta facts.key.daily_folder >}} and {{< meta facts.key.weekly_folder >}} say.
+- [ ] There is one folder per effort state. The folder is the state; moving a note is how you change it.
+
+{{< include _partials/effort-states.qmd >}}
+
+- [ ] Effort notes sit directly in those folders. Notes elsewhere in the vault are never synced, even with the {{< meta facts.fm.sync_tag >}} tag.
+
+### Periodic Notes plugin
+
+- [ ] **Daily Notes** is on, with *Format* {{< meta facts.vault.daily_format >}} and *Note folder* {{< meta facts.vault.daily_folder >}}, so today's note is {{< meta facts.vault.daily_example >}}. These equal {{< meta facts.key.daily_format >}} and {{< meta facts.key.daily_folder >}}.
+- [ ] **Weekly Notes** is on, with *Format* {{< meta facts.vault.weekly_format >}} and *Note folder* {{< meta facts.vault.weekly_folder >}}, so this week's note is {{< meta facts.vault.weekly_example >}}. These equal {{< meta facts.key.weekly_format >}} and {{< meta facts.key.weekly_folder >}}.
+- [ ] Today's daily note exists before the launchd job runs at {{< meta facts.time.job >}}. `gh-inbox` won't create it; if it's missing the job fails and you get an alert. Opening Obsidian (or the reminder link) creates it.
+- [ ] The weekly note exists before you run `gh-inbox digest`.
+
+### Daily note template
+
+{{< include _partials/daily-note-template.qmd >}}
+
+The inbox block, once filled:
+
+{{< include _partials/inbox-block.qmd >}}
+
+### The Log section
+
+{{< include _partials/log-format.qmd >}}
+
+### Weekly note
+
+- [ ] The weekly note can hold {{< meta facts.marker.digest_start >}} and {{< meta facts.marker.digest_end >}} anywhere; without them, `gh-inbox digest` appends them at the end. Only this week's note is ever written.
+
+### Tasks plugin
+
+- [ ] Tasks in effort notes are plain Markdown checkboxes (`- [ ]`, `- [x]`). They stay checkboxes; `sync` copies them into the issue body, done state included.
+- [ ] Due dates use the Tasks date format (`📅 2026-11-10`). They show in the issue as plain text, `(due 2026-11-10)`; GitHub doesn't treat them as dates.
+- [ ] When a task outgrows a checkbox, make it its own effort note with an {{< meta facts.fm.up >}} link back to the original.
+
+### Frontmatter conventions
+
+{{< include _partials/frontmatter.qmd >}}
+
+- [ ] {{< meta facts.fm.up >}} and {{< meta facts.fm.related >}} links point at other effort notes. A link to a note that isn't synced is left out of the issue.
+- [ ] You never hand-edit {{< meta facts.fm.issue_key >}}, except to update it after [promotion](github-project.qmd#promotion-to-a-team-repo).
+
+## How it lines up with the other tools
+
+| Here | Must line up with |
+|---|---|
+| Daily and weekly folders and formats | {{< meta facts.key.daily_folder >}}, {{< meta facts.key.daily_format >}}, {{< meta facts.key.weekly_folder >}}, {{< meta facts.key.weekly_format >}} in the [config](config.qmd) |
+| Effort folders | {{< meta facts.key.efforts_table >}} in the [config](config.qmd); the {{< meta facts.project.field >}} options and {{< meta facts.label.state_prefix >}} labels on the [GitHub Project](github-project.qmd) |
+| {{< meta facts.fm.area_prefix >}} tags | Labels of the same name on {{< meta facts.ph.personal_repo >}} ([GitHub Project](github-project.qmd)) |
+| Today's daily note existing | The {{< meta facts.time.job >}} [launchd job](launchd.qmd), which fails without it |
+| The daily note's path | The `obsidian://` link on the [triage reminder](reminders-calendar.qmd) |

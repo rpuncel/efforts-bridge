@@ -1,0 +1,5 @@
+- One bullet per update under {{< meta facts.vault.log_heading >}}, starting with a link to the effort note: `- [[Effort name]] got the pipeline green, waiting on review`.
+- Bullets that link to an effort note with an {{< meta facts.fm.issue_key >}} are posted by `gh-inbox sync` as a comment on that issue. Bullets without an effort link stay private.
+- Only bullets from days **before** today are posted, so today's log can still be edited.
+- After posting, `sync` appends {{< meta facts.marker.log_posted >}} to the bullet; a marked bullet never posts again. Editing a posted bullet doesn't update the comment.
+- The effort note's backlinks panel shows its whole log.

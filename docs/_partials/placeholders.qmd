@@ -1,0 +1,12 @@
+| Placeholder | Stands for | Real value lives in |
+|---|---|---|
+| {{< meta facts.ph.host >}} | Your GitHub Enterprise hostname | {{< meta facts.key.host >}} in your local config |
+| {{< meta facts.ph.home_host >}} | The host at home (the default) | {{< meta facts.key.host >}} in your local config |
+| {{< meta facts.ph.org >}} | An org on that host | {{< meta facts.key.orgs >}} |
+| {{< meta facts.ph.team_repo >}} | A team repo you work in | {{< meta facts.key.core >}} or {{< meta facts.key.curious >}} |
+| {{< meta facts.ph.user >}} | Your login on that host | {{< meta facts.key.project_owner >}}, {{< meta facts.key.personal_repo >}} |
+| {{< meta facts.ph.personal_repo >}} | The personal repo that holds effort issues | {{< meta facts.key.personal_repo >}} |
+| {{< meta facts.ph.project_number >}} | The number of your efforts GitHub Project | {{< meta facts.key.project_number >}} |
+| {{< meta facts.ph.vault_name >}}, {{< meta facts.ph.vault_path >}} | Your Obsidian vault's name and path | {{< meta facts.key.vault_path >}} |
+
+: Placeholders used throughout this site. Real values live only in {{< meta facts.path.config >}} (or a gitignored {{< meta facts.path.config_local >}}), never in the repo or on this public site.
