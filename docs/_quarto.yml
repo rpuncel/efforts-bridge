@@ -1,0 +1,57 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - "*.qmd"
+    - "!_partials/"
+
+metadata-files:
+  - _partials/facts.yml
+
+website:
+  title: "efforts-bridge"
+  description: "How gh-inbox ties an Obsidian vault to GitHub, and what to check in each tool."
+  repo-url: https://github.com/rpuncel/efforts-bridge
+  repo-subdir: docs
+  repo-actions: [edit, issue]
+  page-navigation: true
+  navbar:
+    left:
+      - href: index.qmd
+        text: Overview
+      - text: Tools
+        menu:
+          - github-settings.qmd
+          - github-project.qmd
+          - obsidian.qmd
+          - launchd.qmd
+          - reminders-calendar.qmd
+          - config.qmd
+      - href: about.qmd
+        text: About these docs
+    right:
+      - icon: github
+        href: https://github.com/rpuncel/efforts-bridge
+  sidebar:
+    style: docked
+    contents:
+      - index.qmd
+      - section: "Tools"
+        contents:
+          - github-settings.qmd
+          - github-project.qmd
+          - obsidian.qmd
+          - launchd.qmd
+          - reminders-calendar.qmd
+          - config.qmd
+      - about.qmd
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: darkly
+    toc: true
+    code-copy: true
+    mermaid:
+      theme: neutral

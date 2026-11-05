@@ -1,0 +1,8 @@
+| Markers | Lives in | Written by | Contains |
+|---|---|---|---|
+| {{< meta facts.marker.inbox_start >}} … {{< meta facts.marker.inbox_end >}} | Today's daily note | `gh-inbox` (daily) | {{< meta facts.inbox.waiting >}}, {{< meta facts.inbox.oldest >}}, hidden-items count, `updated at` stamp |
+| {{< meta facts.marker.digest_start >}} … {{< meta facts.marker.digest_end >}} | This week's weekly note | `gh-inbox digest` | {{< meta facts.digest.new_repos >}}, then flagged releases, features and design discussions |
+| {{< meta facts.marker.body_start >}} … {{< meta facts.marker.body_end >}} | The GitHub issue body | `gh-inbox sync` | The note's Tasks checkboxes (done state included), due dates as plain text, and the `Related` line |
+| {{< meta facts.marker.log_posted >}} | End of a `## Log` bullet in a daily note | `gh-inbox sync` | Nothing; it marks a bullet already posted as an issue comment so it never posts twice |
+
+: Marker comments. Everything between a start and end marker belongs to `gh-inbox` and is replaced on every run; write your own text outside them. If a note has no markers, `gh-inbox` appends them at the end of the note.

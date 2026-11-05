@@ -1,0 +1,54 @@
+---
+title: "GitHub settings and notifications"
+subtitle: "Authentication, watching, and what reaches you."
+---
+
+`gh-inbox` reads your notifications, review requests and assigned issues through `gh --hostname`, so what GitHub decides to notify you about is what lands in your daily inbox. This page is about keeping that signal small and making sure `gh` can see everything it needs.
+
+## What to check
+
+### `gh` authentication
+
+- [ ] `gh auth status --hostname {{< meta facts.ph.host >}}` shows you logged in (at home, {{< meta facts.ph.home_host >}}). The host must be exactly {{< meta facts.key.host >}} in the [config](config.qmd).
+- [ ] The token has the `project` scope, which `sync` needs to set the Project field:
+
+  ```bash
+  gh auth refresh -s project --hostname {{< meta facts.ph.host >}}
+  ```
+
+- [ ] `gh` is on the `PATH` launchd uses, not just your shell's. See [launchd and alerts](launchd.qmd).
+- [ ] On Enterprise, your server version supports GitHub Projects and sub-issues. Without them, `sync` can't set {{< meta facts.project.field >}} or parent issues.
+
+### Notification settings
+
+In **Settings → Notifications** on the host:
+
+- [ ] **Automatically watch repositories** is off. New repos you're added to then start unwatched instead of flooding the inbox.
+- [ ] **Participating, @mentions and custom** has **On GitHub** ticked. These are the notifications that still reach you from repos you don't watch, and `gh-inbox` reads the on-GitHub (web) notifications.
+- [ ] **Watching** has **On GitHub** ticked, for your {{< meta facts.tier.core >}} repos.
+- [ ] Email for these is optional; `gh-inbox` doesn't read email.
+
+### Watched repos
+
+Your watch list on GitHub should match the tiers in the config:
+
+{{< include _partials/repo-tiers.qmd >}}
+
+- [ ] Every repo in {{< meta facts.key.core >}} is watched (**All activity**).
+- [ ] No repo in {{< meta facts.key.curious >}} is watched. `gh-inbox cleanup` shows what would change; `gh-inbox cleanup --apply` unwatches them and marks their notifications read.
+- [ ] Unwatched repos still notify you when you're mentioned, assigned, review-requested or participating, so nothing that needs you goes missing.
+- [ ] On team repos you collaborate on heavily, you're in `CODEOWNERS`, so review requests reach you without watching. Repos you create go in {{< meta facts.tier.core >}}.
+
+### Feedback on this site
+
+- [ ] The {{< meta facts.label.spec >}} label exists on `rpuncel/efforts-bridge`. Each mismatch between these docs and real behaviour is one issue with that label; see [About these docs](about.qmd).
+
+## How it lines up with the other tools
+
+| This setting | Must line up with |
+|---|---|
+| The host you're logged in to | {{< meta facts.key.host >}} in the [config file](config.qmd) |
+| `project` token scope | The [GitHub Project](github-project.qmd) that `sync` writes to |
+| Watched repos | {{< meta facts.key.core >}} and {{< meta facts.key.curious >}} in the [config file](config.qmd) |
+| On-GitHub notifications | {{< meta facts.inbox.waiting >}} and {{< meta facts.inbox.oldest >}} in the daily note ([Obsidian](obsidian.qmd)) |
+| `gh` on `PATH` | The `EnvironmentVariables` of the [launchd job](launchd.qmd) |

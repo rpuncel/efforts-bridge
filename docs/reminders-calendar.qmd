@@ -1,0 +1,38 @@
+---
+title: "Apple Reminders and Calendar"
+subtitle: "The habit nudges that get the triage done."
+---
+
+`gh-inbox` fills the inbox; these make sure you look at it. They're set up by hand once, and nothing in `gh-inbox` reads or writes them.
+
+## What to check
+
+### The triage reminder
+
+In Apple Reminders:
+
+- [ ] **Title**: {{< meta facts.nudge.reminder_title >}}
+- [ ] **Repeat**: every weekday, Monday to Friday. It stays on for Fridays, including Fridays you have off.
+- [ ] **Time**: {{< meta facts.time.triage >}}, about 30 minutes after your start of day ({{< meta facts.time.day_start >}}), so the {{< meta facts.time.job >}} inbox job has already run.
+- [ ] **Follow-up**: a second alert two hours later, at {{< meta facts.time.followup >}}, if it's still unticked. Reminders allows one alert per reminder, plus an *Early Reminder*, so set the date to {{< meta facts.time.followup >}} and an Early Reminder of 2 hours: the first alert comes at {{< meta facts.time.triage >}} and the reminder shows as due (and alerts again) at {{< meta facts.time.followup >}}.
+- [ ] **URL**: {{< meta facts.nudge.daily_uri >}}, with your vault's name in place of `<vault>`. It opens today's daily note. It needs the *Advanced URI* community plugin, because Obsidian's built-in `obsidian://open` link can only open a fixed file.
+- [ ] **Notes**: {{< meta facts.nudge.reminder_notes >}}
+
+Tick it when {{< meta facts.inbox.waiting >}} is handled. {{< meta facts.inbox.oldest >}} is optional and doesn't count.
+
+### Calendar blocks
+
+- [ ] **{{< meta facts.nudge.triage_block >}}**: weekdays, {{< meta facts.time.triage >}}, 15 minutes. Busy.
+- [ ] **{{< meta facts.nudge.digest_block >}}**: {{< meta facts.time.digest_day >}}s, {{< meta facts.time.digest >}}, optional, shown as **free** so it doesn't block meetings. Skipping it is fine.
+- [ ] Put the same `obsidian://` link in the triage block's URL field, so either nudge opens the note.
+
+## How it lines up with the other tools
+
+{{< include _partials/schedule.qmd >}}
+
+| Here | Must line up with |
+|---|---|
+| Reminder time | After the [launchd job](launchd.qmd) at {{< meta facts.time.job >}} |
+| Reminder URL | The daily note at {{< meta facts.key.daily_folder >}} / {{< meta facts.key.daily_format >}} and the vault name ([Obsidian](obsidian.qmd)) |
+| "Done" | {{< meta facts.inbox.waiting >}} in the inbox block ([Obsidian](obsidian.qmd)) |
+| Digest block | `gh-inbox digest` writing this week's weekly note ([Overview](index.qmd#weekly-loop)) |

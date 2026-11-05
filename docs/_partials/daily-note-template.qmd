@@ -1,0 +1,16 @@
+The Periodic Notes daily template (`Templates/Daily note.md` in the vault):
+
+```markdown
+# {{date:dddd, D MMMM YYYY}}
+
+## Inbox
+
+{{< meta facts.marker.inbox_start >}}
+{{< meta facts.marker.inbox_end >}}
+
+{{< meta facts.vault.log_heading >}}
+
+- 
+```
+
+The heading text {{< meta facts.vault.log_heading >}} must match exactly. The inbox markers can sit anywhere; if they're missing, `gh-inbox` adds them at the end of the note.

@@ -1,0 +1,7 @@
+| Label | Where | Set by | Rule |
+|---|---|---|---|
+| {{< meta facts.label.state_prefix >}}`<state>` | {{< meta facts.ph.personal_repo >}} | `gh-inbox sync` | Exactly one per effort issue, from the note's folder (see the effort states table). The sync replaces any other {{< meta facts.label.state_prefix >}} label on the issue. |
+| {{< meta facts.fm.area_prefix >}}`<name>` | {{< meta facts.ph.personal_repo >}} | `gh-inbox sync` | Copied verbatim from the note's frontmatter `tags`, same name, created if missing, all in one colour ({{< meta facts.key.area_color >}}, default {{< meta facts.label.area_color >}}). |
+| {{< meta facts.label.spec >}} | `rpuncel/efforts-bridge` (this repo) | you, by hand | Feedback on these docs or the spec: one issue per mismatch or change. |
+
+: Label scheme. Personal labels are not copied when an issue is promoted to a team repo; `gh issue transfer` drops labels the target repo doesn't have.

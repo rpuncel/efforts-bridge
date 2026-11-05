@@ -1,0 +1,63 @@
+---
+title: "Overview"
+subtitle: "How Obsidian, GitHub and gh-inbox fit together, and the daily and weekly loops."
+---
+
+Obsidian is where you think and capture. GitHub is the source of truth for task status. `gh-inbox`, a config-driven CLI built on the `gh` CLI, carries information between them: GitHub → Obsidian for what needs you today and what happened this week, Obsidian → GitHub for your efforts and their progress. launchd runs it each weekday morning; an Apple Reminder and two calendar blocks make sure you look at the result.
+
+The same setup works against GitHub Enterprise at work ({{< meta facts.ph.host >}}) and {{< meta facts.ph.home_host >}} at home. Only the [config file](config.qmd) differs.
+
+## How the parts fit
+
+```{mermaid}
+flowchart LR
+  L(["launchd<br/>weekday mornings"]) --> D
+  N["GitHub<br/>notifications, review requests,<br/>assigned issues"] --> D["gh-inbox"]
+  W["GitHub<br/>curious + unsorted repos"] --> G["gh-inbox digest"]
+  D --> DN["Obsidian<br/>daily note: inbox block"]
+  G --> WN["Obsidian<br/>weekly note: digest block"]
+  DN -- "you work the inbox,<br/>write Log bullets" --> S["gh-inbox sync"]
+  EF["Obsidian<br/>effort notes: folder = state"] --> S
+  S --> R["GitHub<br/>personal repo: one issue per effort"]
+  S --> P["GitHub Project<br/>Effort state field"]
+  M(["Reminder + Calendar"]) -.-> DN
+  M -.-> WN
+```
+
+| Part | Role | Page |
+|---|---|---|
+| GitHub notifications and watching | Decide what reaches you at all | [GitHub settings and notifications](github-settings.qmd) |
+| Personal repo and GitHub Project | One issue per effort; board grouped by effort state | [GitHub Project](github-project.qmd) |
+| Obsidian vault | Daily and weekly notes, effort notes, Tasks checkboxes | [Obsidian](obsidian.qmd) |
+| launchd and the wrapper script | Runs the daily inbox; alerts on failure | [macOS launchd and alerts](launchd.qmd) |
+| Apple Reminders and Calendar | Habit nudges to actually do the triage | [Apple Reminders and Calendar](reminders-calendar.qmd) |
+| Config file | One file every command reads; the hub everything else lines up with | [gh-inbox config file](config.qmd) |
+
+### Commands
+
+{{< include _partials/commands.qmd >}}
+
+### Where `gh-inbox` writes
+
+{{< include _partials/markers.qmd >}}
+
+## Daily loop
+
+{{< include _partials/schedule.qmd >}}
+
+1. **Before you start**, launchd runs `gh-inbox`. It fills the inbox block in today's daily note ({{< meta facts.vault.daily_example >}}) and stamps `updated at`. If it fails, a persistent macOS alert names the log file. See [launchd and alerts](launchd.qmd).
+2. **Triage.** The reminder fires and the calendar block starts. Tap the reminder's link to open today's note and work through **{{< meta facts.inbox.waiting >}}**: review, reply, or close. **{{< meta facts.inbox.oldest >}}** is optional. Tick the reminder when {{< meta facts.inbox.waiting >}} is handled; if you don't, it nags again later. Refresh by hand with {{< meta facts.launchd.alias >}}.
+3. **During the day**, capture in Obsidian. Tasks stay checkboxes in effort notes; progress goes under {{< meta facts.vault.log_heading >}} in the daily note, one bullet per update, each starting with an effort link. A task that outgrows a checkbox becomes its own effort note.
+4. **Sync** with `gh-inbox sync --dry-run`, then `gh-inbox sync`. New `gh`-tagged effort notes become issues, moved notes change state, checkboxes update the issue body, and yesterday's log bullets become issue comments.
+
+Check the heartbeat: if today's inbox block has no `updated at` stamp from today, the job didn't run.
+
+## Weekly loop
+
+1. **{{< meta facts.time.digest_day >}} afternoon**, run `gh-inbox digest`. It writes the digest block into this week's weekly note ({{< meta facts.vault.weekly_example >}}). Re-running the same week refreshes the block; earlier weeks are never touched.
+2. **{{< meta facts.time.digest_day >}} {{< meta facts.time.digest >}}**, in the optional {{< meta facts.nudge.digest_block >}} block, read it. Sort anything under {{< meta facts.digest.new_repos >}} into {{< meta facts.tier.core >}} or {{< meta facts.tier.curious >}} in the [config](config.qmd). Skipping a week is fine; old digests age out with their weekly note.
+3. **Review efforts.** Look over the [GitHub Project](github-project.qmd) board, then make changes in the vault: move effort notes between state folders as things wake up, stall or finish, and run `gh-inbox sync`. Sync is one way, so a state changed on the board is overwritten by the next sync.
+
+## Placeholders
+
+{{< include _partials/placeholders.qmd >}}

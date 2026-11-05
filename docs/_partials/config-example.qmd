@@ -1,0 +1,52 @@
+```toml
+# {{< meta facts.path.config >}}  (or a gitignored {{< meta facts.path.config_local >}})
+host = "{{< meta facts.ph.host >}}"            # "{{< meta facts.ph.home_host >}}" at home
+personal_repo = "{{< meta facts.ph.personal_repo >}}"
+
+[project]
+owner = "{{< meta facts.ph.user >}}"
+number = {{< meta facts.ph.project_number >}}
+state_field = "{{< meta facts.project.field >}}"
+
+[vault]
+path = "{{< meta facts.ph.vault_path >}}"
+
+[daily_notes]
+folder = "{{< meta facts.vault.daily_folder >}}"
+format = "{{< meta facts.vault.daily_format >}}"
+
+[weekly_notes]
+folder = "{{< meta facts.vault.weekly_folder >}}"
+format = "{{< meta facts.vault.weekly_format >}}"
+
+[efforts]
+on = "{{< meta facts.vault.efforts.on >}}"
+ongoing = "{{< meta facts.vault.efforts.ongoing >}}"
+simmering = "{{< meta facts.vault.efforts.simmering >}}"
+sleeping = "{{< meta facts.vault.efforts.sleeping >}}"
+done = "{{< meta facts.vault.efforts.done >}}"
+canceled = "{{< meta facts.vault.efforts.canceled >}}"
+
+[frontmatter]
+issue_key = "{{< meta facts.fm.issue_key >}}"
+
+[labels]
+area_color = "{{< meta facts.label.area_color >}}"
+
+[inbox]
+waiting_max = {{< meta facts.inbox.waiting_max >}}
+waiting_days = {{< meta facts.inbox.waiting_days >}}
+oldest_max = {{< meta facts.inbox.oldest_max >}}
+
+[repos]
+core = ["{{< meta facts.ph.personal_repo >}}"]
+curious = ["{{< meta facts.ph.team_repo >}}"]   # filled by `gh-inbox cleanup init`
+
+[digest]
+orgs = ["{{< meta facts.ph.org >}}"]
+rules = [
+  "significant features",
+  "releases with non-empty notes",
+  "juicy architectural or design discussions",
+]
+```

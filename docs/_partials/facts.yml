@@ -1,0 +1,129 @@
+# Single-value shared facts for the docs site.
+#
+# Every page and partial pulls these in with {{< meta facts.<group>.<key> >}}.
+# Change a value here and it changes everywhere. Values are wrapped in
+# backticks so they render as inline code in prose (and as plain text inside
+# code blocks). Block-shaped facts (tables, templates, the example config)
+# live in the sibling .qmd partials and are pulled in with {{< include >}}.
+#
+# Placeholders only: never put a real work hostname, org or repo name here.
+facts:
+  ph:
+    host: "`github.example.com`"
+    home_host: "`github.com`"
+    org: "`<your-org>`"
+    team_repo: "`<your-org>/<team-repo>`"
+    user: "`<your-user>`"
+    personal_repo: "`<your-user>/<personal-repo>`"
+    project_number: "`<project-number>`"
+    vault_name: "`<vault>`"
+    vault_path: "`~/Obsidian/<vault>`"
+
+  path:
+    config: "`~/.config/gh-inbox/config.toml`"
+    config_local: "`config.local.toml`"
+    bin: "`~/.local/bin/gh-inbox`"
+    wrapper: "`~/.local/bin/gh-inbox-launchd`"
+    log_dir: "`~/Library/Logs/gh-inbox`"
+    log: "`~/Library/Logs/gh-inbox/daily.log`"
+    plist: "`~/Library/LaunchAgents/local.gh-inbox.daily.plist`"
+
+  launchd:
+    label: "`local.gh-inbox.daily`"
+    alias: "`ghi`"
+
+  vault:
+    daily_folder: "`Calendar/Daily Notes`"
+    daily_format: "`YYYY-MM-DD`"
+    daily_example: "`Calendar/Daily Notes/2026-11-04.md`"
+    weekly_folder: "`Calendar/Weekly Notes`"
+    weekly_format: "`gggg-[W]ww`"
+    weekly_example: "`Calendar/Weekly Notes/2026-W45.md`"
+    log_heading: "`## Log`"
+    efforts:
+      on: "`Efforts/On`"
+      ongoing: "`Efforts/Ongoing`"
+      simmering: "`Efforts/Simmering`"
+      sleeping: "`Efforts/Sleeping`"
+      done: "`Efforts/Done`"
+      canceled: "`Efforts/Canceled`"
+
+  marker:
+    inbox_start: "`<!-- gh-inbox:start -->`"
+    inbox_end: "`<!-- gh-inbox:end -->`"
+    digest_start: "`<!-- gh-digest:start -->`"
+    digest_end: "`<!-- gh-digest:end -->`"
+    body_start: "`<!-- obsidian:start -->`"
+    body_end: "`<!-- obsidian:end -->`"
+    log_posted: "`<!-- gh-log:posted -->`"
+
+  fm:
+    sync_tag: "`gh`"
+    area_prefix: "`area/`"
+    issue_key: "`gh-issue`"
+    up: "`up`"
+    related: "`related`"
+
+  label:
+    state_prefix: "`state/`"
+    area_color: "`#5319e7`"
+    spec: "`spec`"
+
+  project:
+    field: "`Effort state`"
+
+  tier:
+    core: "`core`"
+    curious: "`curious`"
+
+  inbox:
+    waiting: "`Waiting on you`"
+    oldest: "`Oldest`"
+    waiting_max: 10
+    waiting_days: 7
+    oldest_max: 5
+
+  digest:
+    new_repos: "`new repos, please sort`"
+    days: 7
+
+  time:
+    # job, job_hour and job_minute are the same time; change all three together.
+    job: "`08:45`"
+    job_hour: 8
+    job_minute: 45
+    day_start: "`09:00`"
+    triage: "`09:30`"
+    followup: "`11:30`"
+    digest_day: "Thursday"
+    digest: "`15:00`"
+
+  nudge:
+    reminder_title: "`GitHub triage: clear Waiting on You`"
+    reminder_notes: "`Done means the Waiting on You list is handled. Oldest is optional.`"
+    triage_block: "`GitHub triage`"
+    digest_block: "`GitHub weekly digest`"
+    daily_uri: "`obsidian://advanced-uri?vault=<vault>&daily=true`"
+
+  key:
+    host: "`host`"
+    personal_repo: "`personal_repo`"
+    project_owner: "`project.owner`"
+    project_number: "`project.number`"
+    project_field: "`project.state_field`"
+    vault_path: "`vault.path`"
+    daily_folder: "`daily_notes.folder`"
+    daily_format: "`daily_notes.format`"
+    weekly_folder: "`weekly_notes.folder`"
+    weekly_format: "`weekly_notes.format`"
+    efforts: "`efforts.<state>`"
+    efforts_table: "`[efforts]`"
+    issue_key: "`frontmatter.issue_key`"
+    area_color: "`labels.area_color`"
+    core: "`repos.core`"
+    curious: "`repos.curious`"
+    orgs: "`digest.orgs`"
+    rules: "`digest.rules`"
+    waiting_max: "`inbox.waiting_max`"
+    waiting_days: "`inbox.waiting_days`"
+    oldest_max: "`inbox.oldest_max`"

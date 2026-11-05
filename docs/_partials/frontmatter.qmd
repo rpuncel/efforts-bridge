@@ -1,0 +1,22 @@
+| Key | Type | Example | Used by `sync` for |
+|---|---|---|---|
+| `tags` | list | `[gh, area/platform]` | {{< meta facts.fm.sync_tag >}} opts the note in; each {{< meta facts.fm.area_prefix >}}`…` tag becomes a label of the same name |
+| {{< meta facts.fm.up >}} | list of links | `["[[Platform reliability]]"]` | The **first** link becomes the parent issue (sub-issue); any others go on the `Related` line |
+| {{< meta facts.fm.related >}} | list of links | `["[[Runbook rewrite]]"]` | All go on the `Related` line of the issue body |
+| {{< meta facts.fm.issue_key >}} | URL | `https://github.example.com/<your-user>/<personal-repo>/issues/42` | Written by `sync` after it creates the issue; matched on every later run. Don't edit it, except after promotion. |
+
+: Effort-note frontmatter. The note's file name (without `.md`) is the issue title, so renaming a note renames its issue. The folder, not a frontmatter key, sets the state.
+
+An effort note, as `sync` expects it:
+
+```markdown
+---
+tags: [gh, area/platform]
+up: ["[[Platform reliability]]"]
+related: ["[[Runbook rewrite]]"]
+{{< meta facts.fm.issue_key >}}: https://github.example.com/<your-user>/<personal-repo>/issues/42
+---
+
+- [ ] Draft the migration plan 📅 2026-11-10
+- [x] Get the pipeline green ✅ 2026-11-03
+```
