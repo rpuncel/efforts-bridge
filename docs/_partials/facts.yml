@@ -127,3 +127,5 @@ facts:
     waiting_max: "`inbox.waiting_max`"
     waiting_days: "`inbox.waiting_days`"
     oldest_max: "`inbox.oldest_max`"
+    waiting_reasons: "`inbox.waiting_reasons`"
+    sources: "`inbox.sources`"

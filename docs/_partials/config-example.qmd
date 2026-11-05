@@ -37,6 +37,8 @@ area_color = "{{< meta facts.label.area_color >}}"
 waiting_max = {{< meta facts.inbox.waiting_max >}}
 waiting_days = {{< meta facts.inbox.waiting_days >}}
 oldest_max = {{< meta facts.inbox.oldest_max >}}
+waiting_reasons = ["review_requested", "mention", "team_mention", "author", "comment"]
+sources = ["review_requests", "notifications", "assigned"]
 
 [repos]
 core = ["{{< meta facts.ph.personal_repo >}}"]

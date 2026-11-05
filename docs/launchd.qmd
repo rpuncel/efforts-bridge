@@ -33,6 +33,7 @@ exit "$status"
 ```
 
 - [ ] `display alert` (not `display notification`) is what makes the alert persistent.
+- [ ] An alert can come with an inbox that was still written: if only one source failed, the block shows a warning line naming it, and the log says why.
 
 ### The LaunchAgent
 
