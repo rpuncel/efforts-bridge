@@ -19,7 +19,7 @@ def vault(tmp_path: Path) -> Path:
 def config_file(tmp_path: Path, vault: Path) -> Path:
     path = tmp_path / "config.toml"
     path.write_text(
-        f'[github]\nhost = "{HOST}"\n\n[vault]\npath = "{vault.as_posix()}"\n',
+        f'host = "{HOST}"\n\n[vault]\npath = "{vault.as_posix()}"\n',
         encoding="utf-8",
     )
     return path

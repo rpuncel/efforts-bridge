@@ -2,18 +2,16 @@ What `gh-inbox` writes into today's note:
 
 ```markdown
 {{< meta facts.marker.inbox_start >}}
-_updated at {{< meta facts.time.job >}}_
+*updated at 2026-11-04 {{< meta facts.time.job >}} from {{< meta facts.ph.host >}}*
 
 **Waiting on you**
-
-- [ ] [Add retry to uploader](https://github.example.com/<your-org>/<team-repo>/pull/318) · <your-org>/<team-repo> · review requested
-- [ ] [Flaky deploy step](https://github.example.com/<your-org>/<team-repo>/issues/97) · <your-org>/<team-repo> · mentioned
+- [ ] [Add retry to uploader](https://github.example.com/<your-org>/<team-repo>/pull/318) · `<your-org>/<team-repo>` · review requested · 3h ago
+- [ ] [Flaky deploy step](https://github.example.com/<your-org>/<team-repo>/issues/97) · `<your-org>/<team-repo>` · mention · 2d ago
 
 **Oldest**
+- [ ] [Document the release flow](https://github.example.com/<your-user>/<personal-repo>/issues/12) · `<your-user>/<personal-repo>` · assigned · 41d ago
 
-- [ ] [Document the release flow](https://github.example.com/<your-user>/<personal-repo>/issues/12) · <your-user>/<personal-repo> · assigned, 41 days
-
-_14 more items hidden_
+*14 more items hidden (17 total).*
 {{< meta facts.marker.inbox_end >}}
 ```
 
@@ -21,4 +19,5 @@ _14 more items hidden_
 - **{{< meta facts.inbox.oldest >}}**: the {{< meta facts.inbox.oldest_max >}} stalest items, to close or bump. Optional.
 - One line counts the items neither list shows.
 - The `updated at` stamp is the heartbeat: missing or not today's means the job didn't run.
-- If today's note doesn't exist, `gh-inbox` exits with an error and doesn't create it.
+- If one source fails (for example, notifications), the block is still written, with a `> [!warning] Could not fetch …` line under the stamp, and `gh-inbox` exits 1 so the [launchd wrapper](launchd.qmd) alerts. If every source fails, the note is left unchanged and it exits 1.
+- If today's note doesn't exist, `gh-inbox` exits with an error, doesn't create it, and makes no GitHub calls.

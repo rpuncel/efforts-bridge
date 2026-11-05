@@ -1,6 +1,8 @@
 | Command | Does | Writes to |
 |---|---|---|
 | `gh-inbox` | Builds today's inbox from review requests, unread notifications and issues assigned to you | Daily note, between the inbox markers |
+| `gh-inbox --dry-run` | Prints the inbox block instead of writing it | Nothing |
+| `gh-inbox --date YYYY-MM-DD` | Same as `gh-inbox`, for that day's note instead of today's | That day's daily note |
 | `gh-inbox cleanup init` | Lists every repo you watch and adds new ones under {{< meta facts.key.curious >}}; keeps {{< meta facts.key.core >}} and your edits | Config file |
 | `gh-inbox cleanup` | Dry run: which curious repos would be unwatched, with unread counts | Nothing |
 | `gh-inbox cleanup --apply` | Unwatches curious repos and marks their notifications read | GitHub |

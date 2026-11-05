@@ -15,6 +15,8 @@
 | {{< meta facts.key.waiting_max >}} | {{< meta facts.inbox.waiting_max >}} | Cap on {{< meta facts.inbox.waiting >}} |
 | {{< meta facts.key.waiting_days >}} | {{< meta facts.inbox.waiting_days >}} | How far back {{< meta facts.inbox.waiting >}} looks, in days |
 | {{< meta facts.key.oldest_max >}} | {{< meta facts.inbox.oldest_max >}} | Length of {{< meta facts.inbox.oldest >}} |
+| {{< meta facts.key.waiting_reasons >}} | the five reasons shown above | GitHub [notification reasons](https://docs.github.com/rest/activity/notifications#about-notification-reasons) that count as {{< meta facts.inbox.waiting >}}. Add `assigned` to include assigned issues |
+| {{< meta facts.key.sources >}} | all three shown above | Which fetches `gh-inbox` runs. Drop `notifications` if your token can't read them |
 | {{< meta facts.key.core >}} | `[]` | Repos you watch on GitHub ([GitHub settings](github-settings.qmd)) |
 | {{< meta facts.key.curious >}} | `[]` | Repos you don't watch; written by `gh-inbox cleanup init` |
 | {{< meta facts.key.orgs >}} | `[]` | Orgs whose unsorted repos the digest picks up |

@@ -1,9 +1,9 @@
 # gh-inbox config. Copy to ~/.config/gh-inbox/config.toml (or pass --config)
 # and replace the placeholder values. Never commit real hostnames, orgs or repos.
 
-[github]
-# Bare hostname: "github.com" or your GitHub Enterprise Server host.
+# Bare hostname: "github.com" (the default) or your GitHub Enterprise Server host.
 # gh must be logged in to it: `gh auth login --hostname <host>`.
+# (An older `[github]` table with `host = ...` is still accepted.)
 host = "github.example.com"
 
 [vault]

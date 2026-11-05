@@ -93,7 +93,8 @@ def test_missing_config(tmp_path):
 
 
 def test_parse_config_defaults_and_validation(tmp_path):
-    cfg = parse_config({"github": {"host": HOST}, "vault": {"path": "~/v"}})
+    cfg = parse_config({"host": HOST, "vault": {"path": "~/v"}})
+    assert cfg.host == HOST
     assert cfg.daily_folder == "Calendar/Daily Notes"
     assert cfg.daily_format == "YYYY-MM-DD"
     assert (cfg.inbox.waiting_max, cfg.inbox.waiting_days, cfg.inbox.oldest_max) == (10, 7, 5)
@@ -101,7 +102,7 @@ def test_parse_config_defaults_and_validation(tmp_path):
 
     cfg = parse_config(
         {
-            "github": {"host": HOST},
+            "host": HOST,
             "vault": {"path": "/v"},
             "daily_notes": {"format": "YYYY-MM-DD.md"},
             "inbox": {"waiting_max": 3, "sources": ["assigned"]},
@@ -111,13 +112,40 @@ def test_parse_config_defaults_and_validation(tmp_path):
     assert cfg.inbox.waiting_max == 3 and cfg.inbox.sources == ("assigned",)
 
     for bad in (
-        {"vault": {"path": "/v"}},
+        {"host": HOST},
+        {"host": "https://x/", "vault": {"path": "/v"}},
+        {"host": 1, "vault": {"path": "/v"}},
         {"github": {"host": "https://x/"}, "vault": {"path": "/v"}},
-        {"github": {"host": HOST}, "vault": {"path": "/v"}, "inbox": {"waiting_max": "10"}},
-        {"github": {"host": HOST}, "vault": {"path": "/v"}, "inbox": {"sources": ["nope"]}},
+        {"host": HOST, "github": {"host": "other.example.com"}, "vault": {"path": "/v"}},
+        {"host": HOST, "vault": {"path": "/v"}, "inbox": {"waiting_max": "10"}},
+        {"host": HOST, "vault": {"path": "/v"}, "inbox": {"sources": ["nope"]}},
     ):
         with pytest.raises(ConfigError):
             parse_config(bad)
+
+
+def test_host_default_and_legacy_table():
+    assert parse_config({"vault": {"path": "/v"}}).host == "github.com"
+    assert parse_config({"github": {"host": HOST}, "vault": {"path": "/v"}}).host == HOST
+    same = {"host": HOST, "github": {"host": HOST}, "vault": {"path": "/v"}}
+    assert parse_config(same).host == HOST
+
+
+def test_docs_style_config_parses():
+    """The docs' full config (with keys for later commands) loads for the inbox."""
+    cfg = parse_config(
+        {
+            "host": HOST,
+            "personal_repo": "me/efforts",
+            "project": {"owner": "me", "number": 1, "state_field": "Effort state"},
+            "vault": {"path": "/v"},
+            "weekly_notes": {"folder": "Calendar/Weekly Notes", "format": "gggg-[W]ww"},
+            "efforts": {"on": "Efforts/On"},
+            "repos": {"core": [], "curious": []},
+            "digest": {"orgs": [], "rules": []},
+        }
+    )
+    assert cfg.host == HOST
 
 
 def test_example_config_parses():

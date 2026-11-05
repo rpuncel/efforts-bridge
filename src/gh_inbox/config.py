@@ -8,6 +8,8 @@ from pathlib import Path
 
 DEFAULT_CONFIG_PATH = Path("~/.config/gh-inbox/config.toml")
 
+DEFAULT_HOST = "github.com"
+
 ALL_SOURCES = ("review_requests", "notifications", "assigned")
 
 # Notification reasons that count as "waiting on you" (mentions and direct replies).
@@ -63,15 +65,30 @@ def _str_list(table: dict, key: str, where: str, default: tuple[str, ...]) -> tu
     return tuple(value)
 
 
-def parse_config(data: dict) -> Config:
+def _host(data: dict) -> str:
+    """Top-level `host`, falling back to the older `[github] host`; default github.com."""
     github = data.get("github", {})
+    if not isinstance(github, dict):
+        raise ConfigError("'github' must be a table")
+    top, legacy = data.get("host"), github.get("host")
+    if top is not None and legacy is not None and top != legacy:
+        raise ConfigError("'host' and 'github.host' disagree; set only the top-level 'host'")
+    where = "host" if top is not None or legacy is None else "github.host"
+    host = top if top is not None else legacy if legacy is not None else DEFAULT_HOST
+    if not isinstance(host, str):
+        raise ConfigError(f"'{where}' has the wrong type: {host!r}")
+    host = host.strip()
+    if not host or "/" in host:
+        raise ConfigError(f"'{where}' must be a bare hostname, e.g. github.example.com")
+    return host
+
+
+def parse_config(data: dict) -> Config:
     vault = data.get("vault", {})
     daily = data.get("daily_notes", {})
     inbox = data.get("inbox", {})
 
-    host = _get(github, "host", str, "github").strip()
-    if not host or "/" in host:
-        raise ConfigError("'github.host' must be a bare hostname, e.g. github.example.com")
+    host = _host(data)
 
     defaults = InboxConfig()
     inbox_cfg = InboxConfig(
