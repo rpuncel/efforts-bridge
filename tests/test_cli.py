@@ -137,7 +137,7 @@ def test_docs_style_config_parses():
         {
             "host": HOST,
             "personal_repo": "me/efforts",
-            "project": {"owner": "me", "number": 1, "state_field": "Effort state"},
+            "project": {"owner": "me", "number": 1, "intensity_field": "Intensity"},
             "vault": {"path": "/v"},
             "weekly_notes": {"folder": "Calendar/Weekly Notes", "format": "gggg-[W]ww"},
             "efforts": {"on": "Efforts/On"},

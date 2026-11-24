@@ -65,12 +65,12 @@ facts:
     related: "`related`"
 
   label:
-    state_prefix: "`state/`"
+    intensity_prefix: "`intensity/`"
     area_color: "`#5319e7`"
     spec: "`spec`"
 
   project:
-    field: "`Effort state`"
+    field: "`Intensity`"
 
   tier:
     core: "`core`"
@@ -110,13 +110,13 @@ facts:
     personal_repo: "`personal_repo`"
     project_owner: "`project.owner`"
     project_number: "`project.number`"
-    project_field: "`project.state_field`"
+    project_field: "`project.intensity_field`"
     vault_path: "`vault.path`"
     daily_folder: "`daily_notes.folder`"
     daily_format: "`daily_notes.format`"
     weekly_folder: "`weekly_notes.folder`"
     weekly_format: "`weekly_notes.format`"
-    efforts: "`efforts.<state>`"
+    efforts: "`efforts.<folder>`"
     efforts_table: "`[efforts]`"
     issue_key: "`frontmatter.issue_key`"
     area_color: "`labels.area_color`"
