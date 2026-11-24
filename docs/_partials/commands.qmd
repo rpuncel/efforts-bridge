@@ -8,6 +8,6 @@
 | `gh-inbox cleanup --apply` | Unwatches curious repos and marks their notifications read | GitHub |
 | `gh-inbox digest` | Last {{< meta facts.digest.days >}} days of releases, issues and PRs in curious and unsorted repos, flagged by Claude | This week's weekly note, between the digest markers |
 | `gh-inbox sync --dry-run` | Prints the planned issue, label, Project, sub-issue and comment changes | Nothing |
-| `gh-inbox sync` | Syncs effort notes one way, Obsidian → GitHub | {{< meta facts.ph.personal_repo >}}, the Project, the notes' {{< meta facts.fm.issue_key >}} frontmatter, posted log bullets |
+| `gh-inbox sync` | Syncs the vault one way, Obsidian → GitHub. Today that's Effort sync: effort notes to effort issues. Stops before touching GitHub if an effort folder is missing | {{< meta facts.ph.personal_repo >}}, the Project, the notes' {{< meta facts.fm.issue_key >}} frontmatter, posted log bullets |
 
 : `gh-inbox` commands. Every command takes `--config PATH`; without it, `gh-inbox` reads {{< meta facts.path.config >}}. All of them talk to GitHub through `gh --hostname` using {{< meta facts.key.host >}}.

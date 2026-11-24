@@ -8,10 +8,11 @@ from pathlib import Path
 import click
 
 from . import __version__
-from .config import DEFAULT_CONFIG_PATH, ConfigError, load_config
+from .config import DEFAULT_CONFIG_PATH, Config, ConfigError, load_config
 from .github import fetch_all, run_gh
 from .inbox import build_inbox, render_block
 from .note import NoteError, daily_note_path, replace_block, update_note
+from .sync import SyncStopped, run_sync
 
 
 @click.group(invoke_without_command=True)
@@ -36,12 +37,10 @@ from .note import NoteError, daily_note_path, replace_block, update_note
 @click.pass_context
 def main(ctx: click.Context, config_path: Path, for_date: datetime | None, dry_run: bool) -> None:
     """Refresh the GitHub inbox block in today's Obsidian daily note."""
+    ctx.ensure_object(dict)["config_path"] = config_path
     if ctx.invoked_subcommand is not None:
         return
-    try:
-        cfg = load_config(config_path)
-    except ConfigError as exc:
-        raise click.ClickException(str(exc)) from exc
+    cfg = _load(config_path)
 
     day: date = for_date.date() if for_date else date.today()
     note = daily_note_path(cfg.daily_dir, cfg.daily_format, day)
@@ -70,4 +69,40 @@ def main(ctx: click.Context, config_path: Path, for_date: datetime | None, dry_r
         click.echo(f"updated {note}", err=True)
 
     if errors:
+        ctx.exit(1)
+
+
+def _load(config_path: Path) -> Config:
+    try:
+        return load_config(config_path)
+    except ConfigError as exc:
+        raise click.ClickException(str(exc)) from exc
+
+
+@main.command()
+@click.option(
+    "--config",
+    "config_path",
+    type=click.Path(dir_okay=False, path_type=Path),
+    default=None,
+    help="Path to the TOML config file; overrides the one given before `sync`.",
+)
+@click.option("--dry-run", is_flag=True, help="Print the planned changes; write nothing.")
+@click.pass_context
+def sync(ctx: click.Context, config_path: Path | None, dry_run: bool) -> None:
+    """Sync the vault one way, Obsidian -> GitHub.
+
+    Today that is Effort sync: Effort notes become Effort issues in the Personal repo.
+    """
+    cfg = _load(config_path or ctx.obj["config_path"])
+    try:
+        results = run_sync(cfg, run_gh, dry_run=dry_run, echo=click.echo)
+    except SyncStopped as exc:
+        raise click.ClickException(str(exc)) from exc
+
+    for name, result in results:
+        click.echo(f"{name}: {result.summary}", err=True)
+    if dry_run:
+        click.echo("Dry run: nothing was written.", err=True)
+    if any(result.errors for _, result in results):
         ctx.exit(1)

@@ -23,6 +23,15 @@ DEFAULT_WAITING_REASONS = (
 )
 
 
+# Effort folders: one per Intensity for open Efforts, plus the two terminal folders.
+INTENSITIES = ("on", "ongoing", "simmering", "sleeping")
+TERMINAL_EFFORT_STATES = ("done", "canceled")
+EFFORT_FOLDER_KEYS = INTENSITIES + TERMINAL_EFFORT_STATES
+DEFAULT_EFFORT_FOLDERS = {key: f"Efforts/{key.capitalize()}" for key in EFFORT_FOLDER_KEYS}
+
+DEFAULT_ISSUE_KEY = "gh-issue"
+
+
 class ConfigError(Exception):
     """Raised when the config file is missing or invalid."""
 
@@ -43,6 +52,11 @@ class Config:
     daily_folder: str = "Calendar/Daily Notes"
     daily_format: str = "YYYY-MM-DD"
     inbox: InboxConfig = field(default_factory=InboxConfig)
+    # Sync. personal_repo is optional here and checked by `gh-inbox sync`, so a
+    # config for the inbox alone still loads.
+    personal_repo: str | None = None
+    effort_folders: dict[str, str] = field(default_factory=lambda: dict(DEFAULT_EFFORT_FOLDERS))
+    issue_key: str = DEFAULT_ISSUE_KEY
 
     @property
     def daily_dir(self) -> Path:
@@ -83,6 +97,30 @@ def _host(data: dict) -> str:
     return host
 
 
+def _personal_repo(data: dict) -> str | None:
+    repo = data.get("personal_repo")
+    if repo is None:
+        return None
+    if not isinstance(repo, str) or repo.count("/") != 1 or not all(repo.split("/")):
+        raise ConfigError(f"'personal_repo' must look like owner/name: {repo!r}")
+    return repo.strip()
+
+
+def _effort_folders(data: dict) -> dict[str, str]:
+    table = data.get("efforts", {})
+    if not isinstance(table, dict):
+        raise ConfigError("'efforts' must be a table")
+    unknown = set(table) - set(EFFORT_FOLDER_KEYS)
+    if unknown:
+        raise ConfigError(
+            f"unknown 'efforts' keys {sorted(unknown)}; valid: {list(EFFORT_FOLDER_KEYS)}"
+        )
+    folders = {}
+    for key in EFFORT_FOLDER_KEYS:
+        folders[key] = _get(table, key, str, "efforts", DEFAULT_EFFORT_FOLDERS[key]).strip("/")
+    return folders
+
+
 def parse_config(data: dict) -> Config:
     vault = data.get("vault", {})
     daily = data.get("daily_notes", {})
@@ -111,12 +149,22 @@ def parse_config(data: dict) -> Config:
     if fmt.endswith(".md"):
         fmt = fmt[: -len(".md")]
 
+    frontmatter = data.get("frontmatter", {})
+    if not isinstance(frontmatter, dict):
+        raise ConfigError("'frontmatter' must be a table")
+    issue_key = _get(frontmatter, "issue_key", str, "frontmatter", DEFAULT_ISSUE_KEY).strip()
+    if not issue_key or ":" in issue_key or issue_key.startswith(("-", "#")):
+        raise ConfigError(f"'frontmatter.issue_key' is not a usable key: {issue_key!r}")
+
     return Config(
         host=host,
         vault_path=Path(_get(vault, "path", str, "vault")).expanduser(),
         daily_folder=_get(daily, "folder", str, "daily_notes", "Calendar/Daily Notes"),
         daily_format=fmt,
         inbox=inbox_cfg,
+        personal_repo=_personal_repo(data),
+        effort_folders=_effort_folders(data),
+        issue_key=issue_key,
     )
 
 

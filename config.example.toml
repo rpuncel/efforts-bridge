@@ -27,3 +27,21 @@ oldest_max = 5
 waiting_reasons = ["review_requested", "mention", "team_mention", "author", "comment"]
 # Which sources to fetch.
 sources = ["review_requests", "notifications", "assigned"]
+
+# --- gh-inbox sync -------------------------------------------------------------
+# The Personal repo that holds every Effort issue. Sync needs it; the inbox doesn't.
+# personal_repo = "your-user/your-personal-repo"
+
+# [efforts]
+# Effort folders inside the vault. A note's folder sets its Effort state and, while
+# open, its Intensity. These are the defaults.
+# on = "Efforts/On"
+# ongoing = "Efforts/Ongoing"
+# simmering = "Efforts/Simmering"
+# sleeping = "Efforts/Sleeping"
+# done = "Efforts/Done"
+# canceled = "Efforts/Canceled"
+
+# [frontmatter]
+# The frontmatter key Sync writes the Effort issue URL into.
+# issue_key = "gh-issue"

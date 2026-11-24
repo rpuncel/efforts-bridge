@@ -33,11 +33,14 @@ class Item:
     reasons: set[str] = field(default_factory=set)
 
 
-def run_gh(args: Sequence[str]) -> str:
-    """Run `gh` and return stdout. Raises GhError with gh's stderr on failure."""
+def run_gh(args: Sequence[str], input: str | None = None) -> str:
+    """Run `gh` and return stdout. Raises GhError with gh's stderr on failure.
+
+    `input` is passed on stdin, for `gh api ... --input -` request bodies.
+    """
     try:
         proc = subprocess.run(
-            ["gh", *args], capture_output=True, text=True, check=False, timeout=120
+            ["gh", *args], input=input, capture_output=True, text=True, check=False, timeout=120
         )
     except FileNotFoundError as exc:
         raise GhError(

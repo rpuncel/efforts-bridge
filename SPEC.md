@@ -102,6 +102,8 @@ Gotchas:
 
 - GitHub allows one parent per sub-issue; first `up` wins ([ADR 0002](docs/adr/0002-one-effort-note-one-issue.md)).
 - Edits to the owned body section on GitHub get overwritten; discuss in comments ([ADR 0001](docs/adr/0001-one-way-sync-effort-note-authoritative.md)).
+- Stop before touching GitHub if an effort folder is missing, printing the expected path.
+- Keep effort sync one part of sync, so notes tied to other, non-effort issues can join later.
 - Match on full issue URLs, so renaming a note doesn't orphan its issue ([ADR 0003](docs/adr/0003-match-notes-by-issue-url.md)).
 - Effort issues never leave the personal repo, and sync never touches team copies ([ADR 0008](docs/adr/0008-effort-issues-stay-in-personal-repo.md)).
 
