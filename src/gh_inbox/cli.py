@@ -9,11 +9,10 @@ import click
 
 from . import __version__
 from .config import DEFAULT_CONFIG_PATH, Config, ConfigError, load_config
-from .efforts import find_synced_efforts
 from .github import fetch_all, run_gh
 from .inbox import build_inbox, render_block
 from .note import NoteError, daily_note_path, replace_block, update_note
-from .sync import sync_efforts
+from .sync import SyncStopped, run_sync
 
 
 @click.group(invoke_without_command=True)
@@ -91,34 +90,19 @@ def _load(config_path: Path) -> Config:
 @click.option("--dry-run", is_flag=True, help="Print the planned changes; write nothing.")
 @click.pass_context
 def sync(ctx: click.Context, config_path: Path | None, dry_run: bool) -> None:
-    """Sync Effort notes one way, Obsidian -> GitHub, into the Personal repo."""
+    """Sync the vault one way, Obsidian -> GitHub.
+
+    Today that is Effort sync: Effort notes become Effort issues in the Personal repo.
+    """
     cfg = _load(config_path or ctx.obj["config_path"])
-    if not cfg.personal_repo:
-        raise click.ClickException("sync needs 'personal_repo' (owner/name) in the config")
+    try:
+        results = run_sync(cfg, run_gh, dry_run=dry_run, echo=click.echo)
+    except SyncStopped as exc:
+        raise click.ClickException(str(exc)) from exc
 
-    efforts, warnings = find_synced_efforts(cfg.vault_path, cfg.effort_folders, cfg.issue_key)
-    for warning in warnings:
-        click.echo(f"warning: {warning}", err=True)
-
-    result = sync_efforts(
-        efforts,
-        host=cfg.host,
-        personal_repo=cfg.personal_repo,
-        issue_key=cfg.issue_key,
-        vault=cfg.vault_path,
-        runner=run_gh,
-        dry_run=dry_run,
-        echo=click.echo,
-    )
-
-    counts = result.counts()
-    summary = (
-        f"{len(efforts)} Synced efforts. Planned: {counts['create']} create, "
-        f"{counts['update']} update, {counts['unchanged']} unchanged, "
-        f"{counts['skip']} skipped. Errors: {len(result.errors)}"
-    )
+    for name, result in results:
+        click.echo(f"{name}: {result.summary}", err=True)
     if dry_run:
-        summary += ". Dry run: nothing was written."
-    click.echo(summary, err=True)
-    if result.errors:
+        click.echo("Dry run: nothing was written.", err=True)
+    if any(result.errors for _, result in results):
         ctx.exit(1)

@@ -145,8 +145,12 @@ A plain-language criterion for what the Digest flags.
 _Avoid_: Filter, digest rule
 
 **Sync**:
-The one-way push from Effort notes to Effort issues, the efforts Project, and Log entry comments. GitHub never writes back to the vault, except for the Effort issue URL.
+The one-way push from the vault to GitHub, made of parts that each push one kind of note to its issues. GitHub never writes back to the vault, except for issue URLs. Effort sync is the only part so far.
 _Avoid_: Mirror, export, two-way sync
+
+**Effort sync**:
+The part of Sync that pushes Effort notes to Effort issues, the efforts Project, and Log entry comments.
+_Avoid_: Sync, when only this part is meant
 
 **Promotion**:
 Copying an issue from the Personal repo to a Team repo as a Team copy, cross-linked to the original, which stays where it is. It is usually done for issues that aren't Effort issues; an Effort issue that gets promoted keeps syncing as before.

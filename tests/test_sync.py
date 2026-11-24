@@ -8,13 +8,8 @@ from click.testing import CliRunner
 from conftest import HOST
 from gh_inbox import cli
 from gh_inbox.config import ConfigError, parse_config
-from gh_inbox.efforts import (
-    EffortNoteError,
-    find_synced_efforts,
-    read_frontmatter,
-    set_frontmatter_key,
-    tags,
-)
+from gh_inbox.efforts import find_synced_efforts, missing_effort_folders
+from gh_inbox.frontmatter import FrontmatterError, read_frontmatter, set_frontmatter_key, tags
 from gh_inbox.github import GhError
 
 REPO = "me/efforts"
@@ -114,8 +109,7 @@ def test_finds_only_tagged_notes_directly_in_effort_folders(vault):
         ("done", "Ship the pipeline"),
         ("canceled", "Old idea"),
     }
-    # Folders that don't exist in the vault are warnings, not errors.
-    assert any("'ongoing'" in w for w in warnings) and any("'sleeping'" in w for w in warnings)
+    assert warnings == []
 
 
 def test_effort_state_and_intensity_come_from_the_folder(vault):
@@ -170,8 +164,36 @@ def test_fills_an_empty_issue_key_in_place():
 
 
 def test_never_overwrites_an_existing_issue_url():
-    with pytest.raises(EffortNoteError):
+    with pytest.raises(FrontmatterError):
         set_frontmatter_key("---\ngh-issue: A\n---\n", "gh-issue", "B")
+
+
+# --- Missing Effort folders ---------------------------------------------------------
+
+
+def test_missing_effort_folders_are_listed_by_key(vault):
+    (vault / "Efforts/Sleeping/.gitkeep").unlink()
+    (vault / "Efforts/Sleeping").rmdir()
+    assert missing_effort_folders(vault, DEFAULT_FOLDERS) == [
+        ("sleeping", vault / "Efforts/Sleeping")
+    ]
+
+
+@pytest.mark.parametrize("flag", [(), ("--dry-run",)])
+def test_a_missing_effort_folder_stops_sync_before_github(sync_config, vault, gh, flag):
+    for name in ("Sleeping", "Ongoing"):
+        (vault / f"Efforts/{name}/.gitkeep").unlink()
+        (vault / f"Efforts/{name}").rmdir()
+    before = snapshot(vault)
+    result = run_sync(sync_config, *flag)
+    assert result.exit_code == 1
+    assert "Effort folders not found" in result.output
+    assert f"ongoing: {vault / 'Efforts/Ongoing'}" in result.output
+    assert f"sleeping: {vault / 'Efforts/Sleeping'}" in result.output
+    assert "or create them in the vault" in result.output
+    assert "Sync stopped before touching GitHub" in result.output
+    assert gh.calls == []
+    assert snapshot(vault) == before
 
 
 # --- sync --dry-run -----------------------------------------------------------------

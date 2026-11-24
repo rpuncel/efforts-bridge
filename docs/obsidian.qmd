@@ -10,7 +10,7 @@ The vault at {{< meta facts.key.vault_path >}} is where you capture. `gh-inbox` 
 ### Vault folders
 
 - [ ] The daily notes folder is {{< meta facts.vault.daily_folder >}} and the weekly notes folder is {{< meta facts.vault.weekly_folder >}}, or whatever {{< meta facts.key.daily_folder >}} and {{< meta facts.key.weekly_folder >}} say.
-- [ ] There is one Effort folder per Intensity (on, ongoing, simmering, sleeping) for open Efforts, plus a done and a canceled folder. The folder sets the Effort state and the Intensity; moving a note is how you change them.
+- [ ] There is one Effort folder per Intensity (on, ongoing, simmering, sleeping) for open Efforts, plus a done and a canceled folder. The folder sets the Effort state and the Intensity; moving a note is how you change them. All six must exist: `gh-inbox sync` stops before touching GitHub if one is missing and prints the path it expected.
 
 {{< include _partials/effort-folders.qmd >}}
 
