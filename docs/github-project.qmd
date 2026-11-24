@@ -16,17 +16,17 @@ Every effort note tagged {{< meta facts.fm.sync_tag >}} is one issue in your per
 
 {{< include _partials/labels.qmd >}}
 
-- [ ] There are no hand-made {{< meta facts.label.state_prefix >}} labels besides the six from the effort states table below; `sync` would fight them.
+- [ ] There are no hand-made {{< meta facts.label.intensity_prefix >}} labels besides the four from the Effort folders table below; `sync` would fight them.
 - [ ] {{< meta facts.fm.area_prefix >}} label names match the tags in your notes exactly. `sync` creates missing ones; it doesn't rename.
 
 ### The Project and its field
 
 - [ ] The Project is owned by {{< meta facts.ph.user >}} and its URL ends in `/users/<your-user>/projects/<project-number>`, matching {{< meta facts.key.project_owner >}} and {{< meta facts.key.project_number >}}.
-- [ ] It has a single-select field named {{< meta facts.project.field >}} (exactly {{< meta facts.key.project_field >}}) with these six options, spelled as shown:
+- [ ] It has a single-select field named {{< meta facts.project.field >}} (exactly {{< meta facts.key.project_field >}}) with four options, `On`, `Ongoing`, `Simmering` and `Sleeping`, spelled as shown. Done and canceled Efforts have no option: they're closed issues, and `sync` clears the field when it closes one.
 
-{{< include _partials/effort-states.qmd >}}
+{{< include _partials/effort-folders.qmd >}}
 
-- [ ] A board view grouped by {{< meta facts.project.field >}} gives one column per state. Hide `Done` and `Canceled` if you like; they're closed issues.
+- [ ] A board view grouped by {{< meta facts.project.field >}} gives one column per Intensity. Closed issues have no Intensity, so filter the view to `is:open` or they collect in the *No {{< meta facts.project.field >}}* column.
 - [ ] Every effort issue is in the Project. `sync` adds new issues itself; if one is missing, the note probably lacks the {{< meta facts.fm.sync_tag >}} tag.
 
 ### The issues
@@ -34,8 +34,8 @@ Every effort note tagged {{< meta facts.fm.sync_tag >}} is one issue in your per
 Each issue looks like this:
 
 - **Title**: the note's file name.
-- **State**: open, or closed as completed or not planned, per the table above.
-- **Labels**: one {{< meta facts.label.state_prefix >}} label and the note's {{< meta facts.fm.area_prefix >}} tags.
+- **Open or closed**: open while the note is in an Intensity folder; closed as completed (done) or not planned (canceled), per the table above.
+- **Labels**: one {{< meta facts.label.intensity_prefix >}} label while the issue is open, none once it's closed, and the note's {{< meta facts.fm.area_prefix >}} tags.
 - **Parent**: the first {{< meta facts.fm.up >}} link. GitHub allows one parent per sub-issue, so the first link wins. Parents are created before children.
 - **Body**: the part between {{< meta facts.marker.body_start >}} and {{< meta facts.marker.body_end >}} belongs to `sync`: the note's Tasks checkboxes with done state, due dates as plain text, and a `Related` line for extra {{< meta facts.fm.up >}} links and all {{< meta facts.fm.related >}} links. **Edits to that part on GitHub are overwritten on the next sync**; anything outside the markers is yours.
 - **Comments**: your daily-note log bullets for this effort, one comment per bullet, posted the day after you write them. Discuss here, in comments.
@@ -51,19 +51,20 @@ Related: #17, #23
 {{< meta facts.marker.body_end >}}
 ```
 
-### Promotion to a team repo
+### Promotion to a Team repo
 
-When an effort becomes team work:
+Promotion is copy only. It's usually for Personal repo issues that aren't Effort issues:
 
-- **Move**: `gh issue transfer <number> {{< meta facts.ph.team_repo >}} --hostname {{< meta facts.ph.host >}}`. Labels the team repo lacks are dropped, so personal labels stay behind.
-- **Copy**: open a new issue on {{< meta facts.ph.team_repo >}} and cross-link it with the personal one.
-- Either way, put the new issue's full URL in the note's {{< meta facts.fm.issue_key >}} frontmatter. `sync` matches on the full URL, which is why a new repo and number don't break it.
+- Open a new issue on a Team repo such as {{< meta facts.ph.team_repo >}} (the Team copy) and cross-link it with the original in both directions.
+- The original stays in {{< meta facts.ph.personal_repo >}}. Effort issues never leave the Personal repo.
+- If the original is an Effort issue, `sync` keeps updating it from the Effort note as before and never touches the Team copy. The note's {{< meta facts.fm.issue_key >}} URL doesn't change.
+- Work on a Team repo never gets an Effort note, whether it was promoted or started there.
 
 ## How it lines up with the other tools
 
 | Here | Must line up with |
 |---|---|
-| {{< meta facts.project.field >}} options and {{< meta facts.label.state_prefix >}} labels | The effort folders in the vault ([Obsidian](obsidian.qmd)) and {{< meta facts.key.efforts_table >}} in the [config](config.qmd) |
+| {{< meta facts.project.field >}} options and {{< meta facts.label.intensity_prefix >}} labels | The Intensity folders in the vault ([Obsidian](obsidian.qmd)) and {{< meta facts.key.efforts_table >}} in the [config](config.qmd) |
 | Repo, Project owner and number | {{< meta facts.key.personal_repo >}}, {{< meta facts.key.project_owner >}}, {{< meta facts.key.project_number >}} in the [config](config.qmd) |
 | Write access to the Project | The `project` token scope ([GitHub settings](github-settings.qmd)) |
 | Issue URLs | {{< meta facts.fm.issue_key >}} in each effort note's frontmatter ([Obsidian](obsidian.qmd)) |

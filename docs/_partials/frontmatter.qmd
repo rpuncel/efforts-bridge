@@ -3,9 +3,9 @@
 | `tags` | list | `[gh, area/platform]` | {{< meta facts.fm.sync_tag >}} opts the note in; each {{< meta facts.fm.area_prefix >}}`…` tag becomes a label of the same name |
 | {{< meta facts.fm.up >}} | list of links | `["[[Platform reliability]]"]` | The **first** link becomes the parent issue (sub-issue); any others go on the `Related` line |
 | {{< meta facts.fm.related >}} | list of links | `["[[Runbook rewrite]]"]` | All go on the `Related` line of the issue body |
-| {{< meta facts.fm.issue_key >}} | URL | `https://github.example.com/<your-user>/<personal-repo>/issues/42` | Written by `sync` after it creates the issue; matched on every later run. Don't edit it, except after promotion. |
+| {{< meta facts.fm.issue_key >}} | URL | `https://github.example.com/<your-user>/<personal-repo>/issues/42` | Written by `sync` after it creates the issue; matched on every later run. Don't edit it; Promotion doesn't change it. |
 
-: Effort-note frontmatter. The note's file name (without `.md`) is the issue title, so renaming a note renames its issue. The folder, not a frontmatter key, sets the state.
+: Effort-note frontmatter. The note's file name (without `.md`) is the issue title, so renaming a note renames its issue. The Effort folder, not a frontmatter key, sets the Effort state and the Intensity.
 
 An effort note, as `sync` expects it:
 

@@ -10,9 +10,9 @@ The vault at {{< meta facts.key.vault_path >}} is where you capture. `gh-inbox` 
 ### Vault folders
 
 - [ ] The daily notes folder is {{< meta facts.vault.daily_folder >}} and the weekly notes folder is {{< meta facts.vault.weekly_folder >}}, or whatever {{< meta facts.key.daily_folder >}} and {{< meta facts.key.weekly_folder >}} say.
-- [ ] There is one folder per effort state. The folder is the state; moving a note is how you change it.
+- [ ] There is one Effort folder per Intensity (on, ongoing, simmering, sleeping) for open Efforts, plus a done and a canceled folder. The folder sets the Effort state and the Intensity; moving a note is how you change them.
 
-{{< include _partials/effort-states.qmd >}}
+{{< include _partials/effort-folders.qmd >}}
 
 - [ ] Effort notes sit directly in those folders. Notes elsewhere in the vault are never synced, even with the {{< meta facts.fm.sync_tag >}} tag.
 
@@ -50,14 +50,14 @@ The inbox block, once filled:
 {{< include _partials/frontmatter.qmd >}}
 
 - [ ] {{< meta facts.fm.up >}} and {{< meta facts.fm.related >}} links point at other effort notes. A link to a note that isn't synced is left out of the issue.
-- [ ] You never hand-edit {{< meta facts.fm.issue_key >}}, except to update it after [promotion](github-project.qmd#promotion-to-a-team-repo).
+- [ ] You never hand-edit {{< meta facts.fm.issue_key >}}. [Promotion](github-project.qmd#promotion-to-a-team-repo) leaves it alone, because the Effort issue stays in the Personal repo.
 
 ## How it lines up with the other tools
 
 | Here | Must line up with |
 |---|---|
 | Daily and weekly folders and formats | {{< meta facts.key.daily_folder >}}, {{< meta facts.key.daily_format >}}, {{< meta facts.key.weekly_folder >}}, {{< meta facts.key.weekly_format >}} in the [config](config.qmd) |
-| Effort folders | {{< meta facts.key.efforts_table >}} in the [config](config.qmd); the {{< meta facts.project.field >}} options and {{< meta facts.label.state_prefix >}} labels on the [GitHub Project](github-project.qmd) |
+| Effort folders | {{< meta facts.key.efforts_table >}} in the [config](config.qmd); the Intensity folders also line up with the {{< meta facts.project.field >}} options and {{< meta facts.label.intensity_prefix >}} labels on the [GitHub Project](github-project.qmd) |
 | {{< meta facts.fm.area_prefix >}} tags | Labels of the same name on {{< meta facts.ph.personal_repo >}} ([GitHub Project](github-project.qmd)) |
 | Today's daily note existing | The {{< meta facts.time.job >}} [launchd job](launchd.qmd), which fails without it |
 | The daily note's path | The `obsidian://` link on the [triage reminder](reminders-calendar.qmd) |

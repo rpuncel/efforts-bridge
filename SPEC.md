@@ -37,7 +37,7 @@ Privacy: no work hostnames, org names or repo names in committed files ([ADR 000
 - Vault path
 - Daily notes folder (verify — roughly `Calendar/Daily Notes`), filename `YYYY-MM-DD.md` (Periodic Notes)
 - Weekly notes folder and filename format (Periodic Notes)
-- Efforts folders by state: on, ongoing, simmering, sleeping, done, canceled
+- Effort folders: one per Intensity (on, ongoing, simmering, sleeping), plus done and canceled
 - Repo tiers: `core` and `curious`
 - Digest interest rules
 - Inbox caps
@@ -80,15 +80,15 @@ Review: Thursdays ~3pm, optional, marked free. Skipping weeks is fine; old diges
 
 ## 4. Obsidian → GitHub sync
 
-Model: one note = one issue. Checkbox tasks stay checkboxes ([ADR 0002](docs/adr/0002-one-effort-note-one-issue.md)). A task that outgrows a checkbox becomes its own effort note.
+Model: one note = one issue. Checkbox tasks stay checkboxes ([ADR 0002](docs/adr/0002-one-effort-note-one-issue.md)). A task that outgrows a checkbox becomes its own effort note. An open Effort has an Intensity; done and canceled are terminal and have none ([ADR 0009](docs/adr/0009-intensity-split-from-effort-state.md)). Effort issues never leave the personal repo ([ADR 0008](docs/adr/0008-effort-issues-stay-in-personal-repo.md)).
 
-Prerequisites: `gh auth refresh -s project` on the Enterprise host; confirm the Enterprise version supports Projects.
+Prerequisites: `gh auth refresh -s project` on the Enterprise host; confirm the Enterprise version supports Projects; create the efforts Project with an Intensity single-select field (On, Ongoing, Simmering, Sleeping).
 
 Prompt for Claude Code:
 
 > Add a `sync` command to `gh-inbox`, using the same config and host. It syncs one way, from Obsidian to GitHub, into my personal repo.
 >
-> Notes: any note in my efforts folders whose frontmatter tags include `gh` becomes one issue. The note title becomes the issue title. The folder (on, ongoing, simmering, sleeping, done, canceled) sets a `state/` label and an "Effort state" single-select field on a configured GitHub Project. Moving a note to done closes its issue as completed, and moving it to canceled closes it as not planned. Frontmatter `area/...` tags become labels named exactly the same, created if missing in one colour. After creating an issue, write its full URL into the note's frontmatter, and use that URL to match on later runs.
+> Notes: any note in my efforts folders whose frontmatter tags include `gh` becomes one issue. The note title becomes the issue title. A note in an Intensity folder (on, ongoing, simmering, sleeping) keeps its issue open, with exactly one `intensity/` label and the matching option of an "Intensity" single-select field on a configured GitHub Project. Moving a note to done closes its issue as completed, and moving it to canceled closes it as not planned; either way, clear the Intensity label and field. Moving a note back into an Intensity folder reopens its issue and sets them again. Frontmatter `area/...` tags become labels named exactly the same, created if missing in one colour. After creating an issue, write its full URL into the note's frontmatter, and use that URL to match on later runs.
 >
 > Links: the first `up` link becomes the parent issue via sub-issues. Create parents before children. Extra `up` links and all `related` links go in a "Related" line in the body.
 >
@@ -102,7 +102,8 @@ Gotchas:
 
 - GitHub allows one parent per sub-issue; first `up` wins ([ADR 0002](docs/adr/0002-one-effort-note-one-issue.md)).
 - Edits to the owned body section on GitHub get overwritten; discuss in comments ([ADR 0001](docs/adr/0001-one-way-sync-effort-note-authoritative.md)).
-- Match on full issue URLs ([ADR 0003](docs/adr/0003-match-notes-by-issue-url.md)).
+- Match on full issue URLs, so renaming a note doesn't orphan its issue ([ADR 0003](docs/adr/0003-match-notes-by-issue-url.md)).
+- Effort issues never leave the personal repo, and sync never touches team copies ([ADR 0008](docs/adr/0008-effort-issues-stay-in-personal-repo.md)).
 
 ### Daily note template addition
 
@@ -125,6 +126,8 @@ Calendar:
 
 ## 5. Later: promotion
 
-- Move: `gh issue transfer` to a team repo; labels missing there are dropped (personal labels stay behind).
-- Copy: create a new issue on the team repo and cross-link to the personal one.
-- After promotion, update the note's frontmatter URL.
+Promotion is copy only ([ADR 0008](docs/adr/0008-effort-issues-stay-in-personal-repo.md)):
+
+- Create a new issue on the team repo (a team copy) and cross-link it with the personal one in both directions. The original stays in the personal repo.
+- Usually for personal repo issues that aren't effort issues. A promoted effort issue keeps syncing from its effort note, sync never touches the team copy, and the note's frontmatter URL doesn't change.
+- Team repo work, promoted or started there, never gets an effort note.

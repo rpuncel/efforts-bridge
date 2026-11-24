@@ -24,9 +24,9 @@ With the placeholders this site uses:
 
 ### Effort folders
 
-{{< meta facts.key.efforts_table >}} has one key per effort state. Each is a folder path relative to the vault:
+{{< meta facts.key.efforts_table >}} has one key per Effort folder: the four Intensity folders and the two terminal ones, done and canceled. Each is a folder path relative to the vault:
 
-{{< include _partials/effort-states.qmd >}}
+{{< include _partials/effort-folders.qmd >}}
 
 ### Repo tiers
 

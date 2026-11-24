@@ -1,0 +1,10 @@
+| Effort folder | Vault folder | Config key | Effort state | Intensity label | {{< meta facts.project.field >}} option | Issue |
+|---|---|---|---|---|---|---|
+| on | {{< meta facts.vault.efforts.on >}} | `efforts.on` | open | {{< meta facts.label.intensity_prefix >}}`on` | `On` | open |
+| ongoing | {{< meta facts.vault.efforts.ongoing >}} | `efforts.ongoing` | open | {{< meta facts.label.intensity_prefix >}}`ongoing` | `Ongoing` | open |
+| simmering | {{< meta facts.vault.efforts.simmering >}} | `efforts.simmering` | open | {{< meta facts.label.intensity_prefix >}}`simmering` | `Simmering` | open |
+| sleeping | {{< meta facts.vault.efforts.sleeping >}} | `efforts.sleeping` | open | {{< meta facts.label.intensity_prefix >}}`sleeping` | `Sleeping` | open |
+| done | {{< meta facts.vault.efforts.done >}} | `efforts.done` | done | none | none | closed as **completed** |
+| canceled | {{< meta facts.vault.efforts.canceled >}} | `efforts.canceled` | canceled | none | none | closed as **not planned** |
+
+: Effort folders. The four Intensity folders hold open Efforts; done and canceled are terminal, and an Effort there has no Intensity. The folder a note sits in is the only thing you change: `gh-inbox sync` derives the Effort state, the Intensity label, the Project field and whether the issue is open or closed from it. Closing an issue clears its Intensity label and field, and moving the note back into an Intensity folder reopens the issue and sets them again. {tbl-colwidths="[12,18,16,12,16,14,12]"}

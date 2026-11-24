@@ -6,7 +6,7 @@ personal_repo = "{{< meta facts.ph.personal_repo >}}"
 [project]
 owner = "{{< meta facts.ph.user >}}"
 number = {{< meta facts.ph.project_number >}}
-state_field = "{{< meta facts.project.field >}}"
+intensity_field = "{{< meta facts.project.field >}}"
 
 [vault]
 path = "{{< meta facts.ph.vault_path >}}"
