@@ -3,7 +3,7 @@ title: "Overview"
 subtitle: "How Obsidian, GitHub and gh-inbox fit together, and the daily and weekly loops."
 ---
 
-Obsidian is where you think and capture. GitHub is the source of truth for task status. `gh-inbox`, a config-driven CLI built on the `gh` CLI, carries information between them: GitHub → Obsidian for what needs you today and what happened this week, Obsidian → GitHub for your efforts and their progress. launchd runs it each weekday morning; an Apple Reminder and two calendar blocks make sure you look at the result.
+Obsidian is where you think and capture, and your Effort notes are authoritative, status included. GitHub is where that status is published and read. `gh-inbox`, a config-driven CLI built on the `gh` CLI, carries information between them: GitHub → Obsidian for what needs you today and what happened this week, Obsidian → GitHub for your efforts and their progress. launchd runs it each weekday morning; an Apple Reminder and two calendar blocks make sure you look at the result.
 
 The same setup works against GitHub Enterprise at work ({{< meta facts.ph.host >}}) and {{< meta facts.ph.home_host >}} at home. Only the [config file](config.qmd) differs.
 

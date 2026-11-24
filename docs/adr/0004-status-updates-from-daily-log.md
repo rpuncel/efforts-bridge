@@ -1,0 +1,3 @@
+# Status updates come from the Daily note Log, a day late
+
+Progress updates are written as Log entries under `## Log` in the Daily note, each linking to its Effort note. Sync posts them as comments on the Effort issue, but only from days before today, and then marks them so they never post twice. We chose this over writing updates in the Effort note or directly on GitHub because the Daily note is where the work is logged anyway, and the Effort note's backlinks then show its per-Effort log for free. Posted comments can't be cleanly taken back, and the marker format stays in the vault, so this is hard to change later.
