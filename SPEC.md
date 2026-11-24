@@ -1,8 +1,8 @@
 # gh-inbox: Personal GitHub Task System Spec
 
-One config-driven Python CLI (`gh-inbox`) built on the `gh` CLI. Host is configurable (GitHub Enterprise at work, github.com at home). Obsidian is where I think and capture; GitHub is the source of truth for task status.
+One config-driven Python CLI (`gh-inbox`) built on the `gh` CLI. Host is configurable (GitHub Enterprise at work, github.com at home). Obsidian is where I think and capture, and the Effort note is authoritative; GitHub is the published view of Effort status ([ADR 0001](docs/adr/0001-one-way-sync-effort-note-authoritative.md)).
 
-Repo: `efforts-bridge` (personal public GitHub). Stack: Python, Poetry as the build system, Click for the CLI. Installed and run via `uv tool install` / `uvx` or `pipx`; launchd calls the installed command by its full path (e.g. `~/.local/bin/...`).
+Repo: `efforts-bridge` (personal public GitHub). Stack: Python, Poetry as the build system, Click for the CLI ([ADR 0007](docs/adr/0007-python-over-go.md)). Installed and run via `uv tool install` / `uvx` or `pipx`; launchd calls the installed command by its full path (e.g. `~/.local/bin/...`).
 
 ## Step 0: Docs site first, in parallel with the build
 
@@ -14,7 +14,7 @@ Prompt for Claude Code:
 
 > Using this spec, build a Quarto website in my personal public repo, published to GitHub Pages via a GitHub Actions workflow. Organise it as an overview page (how the parts fit and the daily and weekly loops) plus one page per tool I check: GitHub settings and notifications, the GitHub Project, Obsidian (vault folders, Periodic Notes, Tasks plugin, frontmatter conventions, daily note template), macOS launchd and alerts, Apple Reminders and Calendar, and the gh-inbox config file. Each tool page says what to check there and how it must line up with the other tools, linking to them. Put every shared fact (folder names, marker comments, label scheme, effort states, config keys) once in a `_partials/` file and pull it in with `{{< include >}}`; never duplicate content. Use placeholders for my Enterprise hostname, org and repo names; real values live only in a gitignored local config. Document the system as if it already exists. Stop once the site builds locally and the Pages workflow passes.
 
-Privacy: the repo and Pages site are public, so no work hostnames, org names or repo names in committed files.
+Privacy: no work hostnames, org names or repo names in committed files ([ADR 0006](docs/adr/0006-public-repo-private-config.md)).
 
 ### Review and feedback loop
 
@@ -64,7 +64,7 @@ Prompt for Claude Code:
 
 Notes:
 
-- Hand-sort the generated list into core vs curious (ten-minute edit).
+- Hand-sort the generated list into core vs curious (ten-minute edit). Why tiers: [ADR 0005](docs/adr/0005-core-and-curious-repo-tiers.md).
 - Unwatched repos still notify when I'm mentioned, assigned, review-requested, or participating.
 - Add myself to CODEOWNERS on repos I collaborate on heavily. Mark repos I create as core.
 
@@ -80,7 +80,7 @@ Review: Thursdays ~3pm, optional, marked free. Skipping weeks is fine; old diges
 
 ## 4. Obsidian → GitHub sync
 
-Model: one note = one issue. Checkbox tasks stay checkboxes. A task that outgrows a checkbox becomes its own effort note.
+Model: one note = one issue. Checkbox tasks stay checkboxes ([ADR 0002](docs/adr/0002-one-effort-note-one-issue.md)). A task that outgrows a checkbox becomes its own effort note.
 
 Prerequisites: `gh auth refresh -s project` on the Enterprise host; confirm the Enterprise version supports Projects.
 
@@ -100,13 +100,13 @@ Prompt for Claude Code:
 
 Gotchas:
 
-- GitHub allows one parent per sub-issue; first `up` wins.
-- Edits to the owned body section on GitHub get overwritten; discuss in comments.
-- Store full issue URLs so promotion (new repo and number) and note renames don't break matching.
+- GitHub allows one parent per sub-issue; first `up` wins ([ADR 0002](docs/adr/0002-one-effort-note-one-issue.md)).
+- Edits to the owned body section on GitHub get overwritten; discuss in comments ([ADR 0001](docs/adr/0001-one-way-sync-effort-note-authoritative.md)).
+- Match on full issue URLs ([ADR 0003](docs/adr/0003-match-notes-by-issue-url.md)).
 
 ### Daily note template addition
 
-Add a `## Log` heading. One bullet per update, starting with an effort link, e.g. `- [[Effort name]] got the pipeline green, waiting on review`. Bullets without an effort link stay private. Effort notes' backlinks panel shows the per-effort log for free.
+Add a `## Log` heading. One bullet per update, starting with an effort link, e.g. `- [[Effort name]] got the pipeline green, waiting on review`. Bullets without an effort link stay private. Effort notes' backlinks panel shows the per-effort log for free. Why updates live here: [ADR 0004](docs/adr/0004-status-updates-from-daily-log.md).
 
 ## Habit nudges (set up manually)
 

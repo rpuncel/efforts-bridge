@@ -1,6 +1,6 @@
 # Efforts Bridge
 
-A personal task system: Obsidian is where efforts are thought about and captured, GitHub is the source of truth for their status, and `gh-inbox` carries attention from GitHub into the vault and efforts from the vault out to GitHub.
+A personal task system. Obsidian is where efforts are thought about and captured, and the Effort note is authoritative, status included. GitHub is where that status is published and read, and `gh-inbox` carries attention from GitHub into the vault and efforts from the vault out to GitHub.
 
 ## Efforts
 
