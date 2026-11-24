@@ -17,3 +17,6 @@ docs/.quarto/
 /.quarto/
 
 .DS_Store
+
+# Agent tool state (oh-my-claudecode), anywhere in the tree
+.omc/
